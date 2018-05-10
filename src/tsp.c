@@ -25,11 +25,12 @@ int main (void) {
   // run initialization function
   tsp_init();
 
-  // print initial screen
-  print_display_table();
 
   while(1)
   {
+    // print initial screen
+    print_display_table();
+
     //prompt for input
      printf("Make selection: ");
 

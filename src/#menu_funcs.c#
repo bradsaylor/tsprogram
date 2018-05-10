@@ -140,7 +140,7 @@ int edit(int parameter_index)
   
   printf("Enter value for %s: ", parameters[parameter_index].name);
   fgets(new_value, sizeof(new_value), stdin);
-  replace_char(new_value, 10, 0);
+  replace_char(new_value, )
   strcpy(parameters[parameter_index].value, new_value);
   
   return 0;
