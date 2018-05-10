@@ -1,0 +1,37 @@
+
+* Overview
+TSP.c is an application to record and analyze Thiele-Small parameter data sets
+both individually and in groups
+* Key Features
+** Modes
+*** Manual entry mode
+*** Design mode
+*** Analysis mode
+** Functions as a front-end to a user TSP database
+** Designs may be stored and recalled
+** Designs may be analyzed in groups and against design targets
+** Auto-calculation of secondary parameters in design mode
+* General operation
+** File name and group may be added to aid in analysis mode
+** Parameter set is displayed on screen and initialized to zero if not loaded from file
+** Parameter values are changed based on user selection
+** Parameter set is updated after every edit
+** Save command stores data in database filed under correct name and group
+* Mode descriptions
+** Manual entry mode
+*** Parameters are selected and edited by user input
+** Design Mode
+*** Auto-calculation
+**** Secondary parameters are calculated based on primary ones once data is entered
+**** Display distinguished between manually entered and calculated parameters
+**** If a target dataset is identified with the entered group ID % variance vs target is displayed
+** Analysis Mode
+*** TSP data may be recalled either by individual name or group ID
+*** Tolerance file may be associated with a group ID 
+*** Statistics displayed
+**** Mean statistics
+***** Group mean
+***** Group std dev from mean
+**** Target statistics
+***** Std dev from target
+***** Out of tolerance indication vs group tolerance file

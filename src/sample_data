@@ -1,0 +1,33 @@
+ID: 8in_4ohm
+
+name: #1_8in_4ohm
+modified: 2018-04-20
+ref: N
+fs	xxx.xx
+re 	xxx.xx
+res 	xxx.xx
+qms 	xxx.xx
+qes 	xxx.xx
+qts 	xxx.xx
+vas 	xxx.xx
+mms 	xxx.xx
+cms 	xxx.xx
+bl 	xxx.xx
+spl 	xxx.xx
+sd 	xxx.xx
+
+name: #2_8in_4ohm
+modified: 2018-04-20
+ref: Y
+fs	xxx.xx
+re 	xxx.xx
+res 	xxx.xx
+qms 	xxx.xx
+qes 	xxx.xx
+qts 	xxx.xx
+vas 	xxx.xx
+mms 	xxx.xx
+cms 	xxx.xx
+bl 	xxx.xx
+spl 	xxx.xx
+sd 	xxx.xx

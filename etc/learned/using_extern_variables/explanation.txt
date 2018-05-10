@@ -1,0 +1,80 @@
+
+Using extern is only of relevance when the program you're building consists of multiple source files linked together, where some of the variables defined, for example, in source file file1.c need to be referenced in other source files, such as file2.c.
+
+It is important to understand the difference between defining a variable and declaring a variable:
+
+A variable is declared when the compiler is informed that a variable exists (and this is its type); it does not allocate the storage for the variable at that point.
+A variable is defined when the compiler allocates the storage for the variable.
+You may declare a variable multiple times (though once is sufficient); you may only define it once within a given scope. A variable definition is also a declaration, but not all variable declarations are definitions.
+
+Best way to declare and define global variables
+
+Although there are other ways of doing it, the clean, reliable way to declare and define global variables is to use a header file file3.h to contain an extern declaration of the variable. The header is included by the one source file that defines the variable and by all the source files that reference the variable. For each program, one source file (and only one source file) defines the variable. Similarly, one header file (and only one header file) should declare the variable.
+
+file3.h
+
+extern int global_variable;  /* Declaration of the variable */
+file1.c
+
+#include "file3.h"  /* Declaration made available here */
+#include "prog1.h"  /* Function declarations */
+
+/* Variable defined here */
+int global_variable = 37;    /* Definition checked against declaration */
+
+int increment(void) { return global_variable++; }
+file2.c
+
+#include "file3.h"
+#include "prog1.h"
+#include <stdio.h>
+
+void use_it(void)
+{
+    printf("Global variable: %d\n", global_variable++);
+}
+That's the best way to use them.
+
+The next two files complete the source for prog1:
+
+prog1.h
+
+extern void use_it(void);
+extern int increment(void);
+prog1.c
+
+#include "file3.h"
+#include "prog1.h"
+#include <stdio.h>
+
+int main(void)
+{
+    use_it();
+    global_variable += 19;
+    use_it();
+    printf("Increment: %d\n", increment());
+    return 0;
+}
+prog1 uses prog1.c, file1.c, file2.c, file3.h and prog1.h.
+Guidelines
+
+Rules to be broken by experts only, and only with good reason:
+
+A header file only contains extern declarations of variables — never static or unqualified variable definitions.
+
+For any given variable, only one header file declares it (SPOT — Single Point of Truth).
+
+A source file never contains extern declarations of variables — source files always include the (sole) header that declares them.
+
+For any given variable, exactly one source file defines the variable, preferably initializing it too.
+
+(Although there is no need to initialize explicitly to zero, it does no harm and can do some good, because there can be only one
+initialized definition of a particular global variable in a program).
+
+The source file that defines the variable also includes the header to ensure that the definition and the declaration are consistent.
+
+A function should never need to declare a variable using extern.
+
+Avoid global variables whenever possible — use functions instead.
+
+If you're not an experienced C programmer, you could (and perhaps should) stop reading here.

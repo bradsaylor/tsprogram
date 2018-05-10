@@ -1,0 +1,29 @@
+
+
+* Save
+** Determine if file is a group target
+*** if yes then set local flag
+*** if no then do nothing and continue
+** Prepare data set for writing out
+*** stored in array
+**** first three elements -> name, modified, ref Y/N
+**** Next elements are tsp parameter names and values
+**** Last element is a blank line
+** Check to see if a group name has been given
+*** If not make a group name using file name
+*** If so do nothing and continue
+** Check to see if a name has been given
+*** If not send to name() routine
+*** If so do nothing and continue
+** Open file
+** Check to see if file size plus pending data will exceed limit
+*** If so display error and exit back to main()
+*** If not continue
+** If target flag is set then re-write file replacing any "ref: Y" with "ref: N"
+** Search through .grp file to find alphabetic insert point
+*** If found start caching existing file lines and writing out data
+**** When data write is finished append a blank line
+**** Write out the cached data appended below the blank line
+*** If not found append data to end of file
+** close file
+
