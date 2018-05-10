@@ -6,7 +6,7 @@
   global constant declarations
 *******************************/
 #define MAX_NAME_LENGTH 50	//max length of any string input
-#define MAX_VALUE_LENGTH 11	//max length of any number input
+#define MAX_VALUE_LENGTH 10	//max length of any number input
 #define MAX_FILE_LINE 100	//max chars in any file line
 #define MAX_FILE_LENGTH 500	//max number of lines in any file
 #define FILE_EXTENSION ".grp"	//extension for group data files
@@ -19,19 +19,19 @@
 /******************************
   global data structures
 ******************************/
-struct parameter {		//parameter struct to hold param attributes
-    char name[MAX_VALUE_LENGTH];
-    char value[MAX_VALUE_LENGTH];
-    char units[MAX_VALUE_LENGTH];
-    char ref_value[MAX_VALUE_LENGTH];
-    char variance[MAX_VALUE_LENGTH];
-    char tolerance[MAX_VALUE_LENGTH];
-    char fault[MAX_VALUE_LENGTH];
+struct parameter{			//parameter struct to hold param attributes
+  char name[MAX_VALUE_LENGTH];
+  char value[MAX_VALUE_LENGTH];
+  char units[MAX_VALUE_LENGTH];
+  char ref_value[MAX_VALUE_LENGTH];
+  char variance[MAX_VALUE_LENGTH];
+  char tolerance[MAX_VALUE_LENGTH];
+  char fault[MAX_VALUE_LENGTH];
 };
 
-struct is_target {		//DON'T KNOW!!! SHOULD BE RESOLVED OR DELETED
-    int file_target;
-    int ref_target;
+struct is_target{			//DON'T KNOW!!! SHOULD BE RESOLVED OR DELETED
+  int file_target;
+  int ref_target;
 };
 
 
@@ -40,20 +40,19 @@ struct is_target {		//DON'T KNOW!!! SHOULD BE RESOLVED OR DELETED
 ******************************/
 enum parameter_list		//enum to reference parameters as integers
 {
-    table_header = 1,
-    fs,
-    re,
-    res,
-    qms,
-    qes,
-    qts,
-    vas,
-    mms,
-    cms,
-    bl,
-    spl,
-    sd,
-    last,			//'last' used to indicate total number of parameters
+  fs = 1,
+  re,
+  res,
+  qms,
+  qes,
+  qts,
+  vas,
+  mms,
+  cms,
+  bl,
+  spl,
+  sd,
+  last,				//'last' used to indicate total number of parameters
 };
 
 
@@ -68,6 +67,6 @@ extern char group_name[];		//group file name defined in tsp.c
 //  output table char array
 	// 'last - 1' -> number of parameters
 	// 'table_cell_width + 1' width of table cell plus '\0' terminator
-char display_table[last - 1][num_param_attributes][table_cell_width + 1];  
+char display_table[last - 1][num_param_attributes][table_cell_width + 1];
 
-#endif				//TSP_H_
+#endif //TSP_H_

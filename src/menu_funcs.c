@@ -199,10 +199,6 @@ int save(void)
   int copied_counter = 0;
   int file_line_count = 0;
   int insert_point = 0;
- 
-
-//** close file
-
 
   //** Check to see if a group name has been given
   //*** If not make a group name using file name
@@ -251,7 +247,7 @@ int save(void)
     file_line_count++;
 
     // sscanf returns EOF if scan is not successful i.e. when reading a blank line
-    if(sscanf(file_line, "%s %s", parsed_name, parsed_value)!=EOF && insert_point == 0)
+    if(sscanf(file_line, "%s %s", parsed_name, parsed_value)!=EOF)
     {
       if(insert_point ==0){
 	if(!strcmp(parsed_name, "name:"))

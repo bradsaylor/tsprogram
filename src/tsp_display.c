@@ -16,8 +16,12 @@ int print_display_table(void)
      //  populate display table with parameter attributes
      populate_display_table();
 
+     // print display header information
+     printf("File: \t%s\n", file_name);
+     printf("Group:\t%s\n", group_name);
+
      //  print out top table horizontal delimiter
-     print_table_horizontal_delimiter(num_param_attributes, table_cell_width);
+     print_table_horizontal_delimiter(num_param_attributes, table_cell_width, '=');
      //  print '\n' to start first row
      printf("\n");
 
@@ -50,7 +54,10 @@ int print_display_table(void)
 	  printf("\n");
 
 	  //  print out row table horizontal delimiter
-	  print_table_horizontal_delimiter(num_param_attributes, table_cell_width);
+	  if(count1 == 0){
+	       print_table_horizontal_delimiter(num_param_attributes, table_cell_width, '=');
+	  }else print_table_horizontal_delimiter(num_param_attributes, table_cell_width, '-');
+	  
 
 	  //  print '\n' to begin new row
 	  printf("\n");
@@ -59,13 +66,13 @@ int print_display_table(void)
   return 0;
 }
 
-int print_table_horizontal_delimiter(int columns, int cell_width)
+int print_table_horizontal_delimiter(int columns, int cell_width, char delimiter)
 {
      int count = 0;
      int width = columns * (cell_width + 1) + 1;
 
      for(count = 0; count < width; count++){
-	  printf("_");
+	  printf("%c", delimiter);
      }
 
      return 0;
@@ -77,6 +84,8 @@ int populate_display_table()
      int num_parameters = last - 1;
 
      for(count1 = 0; count1 < num_parameters; count1 ++){
+	  // parameters index is 'count1 + 1'
+	  // because parameters enum begins at 1 not 0
 	  strcpy(display_table[count1][0], parameters[count1 + 1].name);
 	  strcpy(display_table[count1][1], parameters[count1 + 1].value);
 	  strcpy(display_table[count1][2], parameters[count1 + 1].units);

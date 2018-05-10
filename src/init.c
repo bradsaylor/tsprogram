@@ -4,6 +4,15 @@
 
 int tsp_init(void) {
 
+  strcpy(parameters[table_header].name,"Name");
+  strcpy(parameters[table_header].value, "Value");
+  strcpy(parameters[table_header].units, "Units");
+  strcpy(parameters[table_header].ref_value, "Ref. Value");
+  strcpy(parameters[table_header].variance,  "Variance");
+  strcpy(parameters[table_header].tolerance, "Tolerance");
+  strcpy(parameters[table_header].fault, "Fault");
+
+
   strcpy(parameters[fs].name,"fs");
   strcpy(parameters[fs].value, empty_label);
   strcpy(parameters[fs].units, "Hz");
@@ -60,7 +69,7 @@ int tsp_init(void) {
 
   strcpy(parameters[vas].name,"vas");
   strcpy(parameters[vas].value, empty_label);
-  strcpy(parameters[vas].units, "l");
+  strcpy(parameters[vas].units, "Litres");
   strcpy(parameters[vas].ref_value, empty_label);
   strcpy(parameters[vas].variance, empty_label);
   strcpy(parameters[vas].tolerance, empty_label);
@@ -69,7 +78,7 @@ int tsp_init(void) {
 
   strcpy(parameters[mms].name,"mms");
   strcpy(parameters[mms].value, empty_label);
-  strcpy(parameters[mms].units, "g");
+  strcpy(parameters[mms].units, "Grams");
   strcpy(parameters[mms].ref_value, empty_label);
   strcpy(parameters[mms].variance, empty_label);
   strcpy(parameters[mms].tolerance, empty_label);
