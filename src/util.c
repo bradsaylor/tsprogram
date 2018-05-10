@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <fcntl.h>
 
-#include "util.h"
+#include "../include/util.h"
 
 
 int check_file_length(char *name, int max_file_size, int max_file_line)
