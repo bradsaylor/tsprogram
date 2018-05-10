@@ -9,7 +9,7 @@ void print_parameters(void)
 
   for(count = 1; count < last; count++)
   {
-    printf("%s\t%7.2f\n", parameters[count].name, parameters[count].value);
+    printf("%s\t%s\n", parameters[count].name, parameters[count].value);
   }
   
 }
