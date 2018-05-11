@@ -118,8 +118,7 @@ int print_file_line(char *name, int file_line);
             1 -> if requested line is beyond length of file
 __________________________________________________________________________ */
 
-int search_file_delimited(char *name, char *delim_f, char *delim_b,
-			  char *search);
+int search_file_delimited(char *name, char *delim_f, char *delim_b, char *search);
 /*
   ***** int search_file_delimited(char *name, char *delim_f, char *delim_b, char *search) *****
   Searches file 'name' delmited by front and back delimiters 'delim_f' and
@@ -187,6 +186,4 @@ int print_table(int rows, int columns, int cell_size);
   USES:  <stdio.h>
 __________________________________________________________________________ */
 
-int check_file_for_string(char *name, char *str, int search_buffer_size);
-
-#endif				//UTIL_H_
+#endif //UTIL_H_

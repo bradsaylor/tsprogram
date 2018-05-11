@@ -3,4 +3,4 @@
 
 void print_parameters(void);
 
-#endif				//DEBUG_H_
+#endif //DEBUG_H_

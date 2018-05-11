@@ -10,10 +10,10 @@ LDIR=../lib
 LIBS=-lm
 
 
-_DEPS = tsp.h init.h menu_funcs.h debug.h util.h tsp_display.h
+_DEPS = tsp.h init.h menu_funcs.h debug.h util.h tsp_display.h tsp_file_func_utils.h
 DEPS = $(patsubst %,$(IDIR)/%,$(_DEPS))
 
-_OBJ = tsp.o init.o menu_funcs.o debug.o util.o tsp_display.o
+_OBJ = tsp.o init.o menu_funcs.o debug.o util.o tsp_display.o tsp_file_func_utils.o
 OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))
 
 $(ODIR)/%.o: %.c $(DEPS)

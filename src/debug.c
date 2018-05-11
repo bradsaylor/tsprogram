@@ -5,11 +5,11 @@
 
 void print_parameters(void)
 {
-  int count = 0;
+    int count = 0;
 
-  for(count = 1; count < last; count++)
-  {
-    printf("%s\t%s\n", parameters[count].name, parameters[count].value);
-  }
-  
+    for (count = 1; count < last; count++) {
+	printf("%s\t%s\n", parameters[count].name,
+	       parameters[count].value);
+    }
+
 }

@@ -16,6 +16,8 @@ struct is_target is_target_flag;
 
 char file_name[MAX_NAME_LENGTH];
 char group_name[MAX_NAME_LENGTH];
+char manifest_name[] = ".grp_manifest";
+char auto_calc_status;
 
 int main(void)
 {

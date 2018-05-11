@@ -3,4 +3,4 @@
 
 int validate_input(char *input);
 
-#endif				//VALIDATE_INPUT_H_
+#endif //VALIDATE_INPUT_H_

@@ -4,4 +4,4 @@
 // function prototypes
 int tsp_init(void);
 
-#endif				//INIT_H_
+#endif //INIT_H_

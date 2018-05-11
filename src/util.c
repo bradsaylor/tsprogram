@@ -365,3 +365,33 @@ int print_table(int rows, int columns, int cell_size)
 
      return 0;
 }
+
+int check_file_for_string(char *name, char *str, int search_buffer_size)
+{
+    char search_buffer[search_buffer_size];
+    char file_char;
+    int file_char_count = 0;
+    FILE *fp;
+
+    fp = fopen(name, "r");
+    file_char = getc(fp);
+
+    while(file_char != EOF) {
+	search_buffer[file_char_count] = file_char;
+	file_char_count++;
+	
+	if(file_char_count >= (search_buffer_size - 1)) {
+	    printf("\nsearch buffer overload\n");
+	    return 2;
+	}
+	file_char = getc(fp);
+    }
+
+    // place null terminator at end of read chars
+    search_buffer[file_char_count + 1] = '\0';
+
+    if(strstr(search_buffer, str) != NULL) return 0;
+    
+
+    return 1;    
+}
