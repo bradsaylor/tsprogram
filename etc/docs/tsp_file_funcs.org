@@ -1,20 +1,26 @@
-
+#+OPTIONS: toc:nil
+#+TITLE: Outline of tsprogram File Functions
+#+AUTHOR: Brad Saylor
 
 * Save
+** Determine if file has been named
+*** if not send to name()
+** Determine if group has been named
+*** if not name group = 'file name'
+** Determine if group name is unique
+*** search .grp manifest for group ID
+*** if already exists prompt for a new name and store
 ** Determine if file is a group target
-*** if yes then set local flag
-*** if no then do nothing and continue
+*** if yes then 
+**** Determine if group already has a target file
+***** if yes then ask if it should be replaced
+****** if no then exit save()
+**** Set local flag to indicate this is target
 ** Prepare data set for writing out
 *** stored in array
 **** first three elements -> name, modified, ref Y/N
 **** Next elements are tsp parameter names and values
 **** Last element is a blank line
-** Check to see if a group name has been given
-*** If not make a group name using file name
-*** If so do nothing and continue
-** Check to see if a name has been given
-*** If not send to name() routine
-*** If so do nothing and continue
 ** Open file
 ** Check to see if file size plus pending data will exceed limit
 *** If so display error and exit back to main()
@@ -26,4 +32,3 @@
 **** Write out the cached data appended below the blank line
 *** If not found append data to end of file
 ** close file
-

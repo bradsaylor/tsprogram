@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <time.h>
 #include "../include/tsp.h"
 
 // include utilities and init headers
@@ -25,6 +26,10 @@ int main(void)
     // local variables
     char input[MAX_VALUE_LENGTH];
     char selection[MAX_VALUE_LENGTH];
+    char time_stamp[50];
+
+    get_datestamp(time_stamp);
+    printf("\n%s\n", time_stamp);
 
     // run initialization function
     tsp_init();

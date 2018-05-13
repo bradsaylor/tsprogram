@@ -1,16 +1,18 @@
+/* localtime example */
 #include <stdio.h>
+#include <time.h>
+#include <string.h>
 
-#include "../include/util.h"
-
-int main()
+int main ()
 {
-    int result = -1;
+  time_t rawtime;
+  struct tm * timeinfo;
+  char time_stamp[50];
 
-    result = check_file_for_string("test_file.txt", "brad", 1000);
+  time( &rawtime );
+  timeinfo = localtime ( &rawtime );
+  strcpy(time_stamp, asctime(timeinfo));
+  printf ( "Current local time and date: %s\n", time_stamp );
 
-    if(result == 0) {
-	printf("\nfound\n");
-    } else printf("\nnot found\n");
-
-    return 0;
+  return 0;
 }

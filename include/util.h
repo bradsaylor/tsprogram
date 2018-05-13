@@ -189,4 +189,7 @@ __________________________________________________________________________ */
 
 int check_file_for_string(char *name, char *str, int search_buffer_size);
 
+int get_datestamp(char *str);
+
+
 #endif				//UTIL_H_

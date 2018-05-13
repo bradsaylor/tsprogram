@@ -2,6 +2,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <fcntl.h>
+#include <time.h>
 
 #include "../include/util.h"
 
@@ -394,4 +395,17 @@ int check_file_for_string(char *name, char *str, int search_buffer_size)
     
 
     return 1;    
+}
+
+int get_datestamp(char *str)
+{
+    struct tm *timeinfo;
+    time_t current_time;
+
+    time(&current_time);
+    timeinfo = localtime(&current_time);
+    sprintf(str, "%d-%02.0f-%02.0f",
+	    timeinfo->tm_year + 1900, (float)timeinfo->tm_mon + 1.0, (float)timeinfo->tm_mday);
+    
+    return 0;
 }

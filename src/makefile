@@ -2,7 +2,7 @@
 
 IDIR =../include
 CC=gcc
-CFLAGS=-I$(IDIR)
+CFLAGS=-g -I$(IDIR)
 
 ODIR=obj
 LDIR=../lib
