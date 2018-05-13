@@ -1,13 +1,11 @@
-#+OPTIONS: toc:nil
-#+TITLE: Outline of tsprogram File Functions
-#+AUTHOR: Brad Saylor
+#+OPTIONS: toc:nil n:1
 
 * Save
-** Determine if file has been named
+** DONE Determine if file has been named
 *** if not send to name()
-** Determine if group has been named
+** DONE Determine if group has been named
 *** if not name group = 'file name'
-** Determine if group name is unique
+** TODO Determine if group name is unique
 *** search .grp manifest for group ID
 *** if already exists prompt for a new name and store
 ** Determine if file is a group target
@@ -16,19 +14,10 @@
 ***** if yes then ask if it should be replaced
 ****** if no then exit save()
 **** Set local flag to indicate this is target
-** Prepare data set for writing out
-*** stored in array
-**** first three elements -> name, modified, ref Y/N
-**** Next elements are tsp parameter names and values
-**** Last element is a blank line
 ** Open file
-** Check to see if file size plus pending data will exceed limit
-*** If so display error and exit back to main()
-*** If not continue
-** If target flag is set then re-write file replacing any "ref: Y" with "ref: N"
-** Search through .grp file to find alphabetic insert point
-*** If found start caching existing file lines and writing out data
-**** When data write is finished append a blank line
-**** Write out the cached data appended below the blank line
-*** If not found append data to end of file
-** close file
+** Format group file to write out
+*** If target is being replaced then rewreite file replacing any 'Y' target string with 'N'
+** Write out data
+*** append new data to the end of the file
+** Sort .grp file by 'name' attribute
+** Close file
