@@ -1,4 +1,0 @@
-this is a test
-here we go
-target: N
-that should have been replaced

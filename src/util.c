@@ -29,7 +29,7 @@ int append_to_file(char *name, char *add_string)
   int result = 0;
 
   fp = fopen(name, "a+");
-  result = fprintf(fp, "%s", add_string);
+  result = fprintf(fp, "\n%s", add_string);
   fclose(fp);
 
   return result;
@@ -404,8 +404,9 @@ int get_datestamp(char *str)
 
     time(&current_time);
     timeinfo = localtime(&current_time);
-    sprintf(str, "%d-%02.0f-%02.0f",
-	    timeinfo->tm_year + 1900, (float)timeinfo->tm_mon + 1.0, (float)timeinfo->tm_mday);
+    sprintf(str, "%d-%02.0f-%02.0f %02.0f:%02.0f:%02.0f",
+	    timeinfo->tm_year + 1900, (float)timeinfo->tm_mon + 1.0, (float)timeinfo->tm_mday,
+	    (float)timeinfo->tm_hour, (float)timeinfo->tm_min, (float)timeinfo->tm_sec);
     
     return 0;
 }

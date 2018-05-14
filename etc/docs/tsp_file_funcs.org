@@ -8,16 +8,17 @@
 ** TODO Determine if group name is unique
 *** search .grp manifest for group ID
 *** if already exists prompt for a new name and store
-** Determine if file is a group target
-*** if yes then 
-**** Determine if group already has a target file
-***** if yes then ask if it should be replaced
-****** if no then exit save()
-**** Set local flag to indicate this is target
+** DONE Determine if file is a group target
+*** DONE if yes then 
+**** DONE Determine if group already has a target file
+***** DONE ***doesn't belong here ***if yes then ask if it should be replaced
+****** DONE if no then exit save()
 ** Open file
 ** Format group file to write out
-*** If target is being replaced then rewreite file replacing any 'Y' target string with 'N'
+*** DONE If target is being replaced then rewreite file replacing any 'Y' target string with 'N'
 ** Write out data
+*** write out header info
+*** write out parameter attributes
 *** append new data to the end of the file with ': :' delimiters
 ** Sort .grp file by 'name' attribute
 ** Close file

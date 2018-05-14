@@ -146,7 +146,7 @@ int save(void)
 {
     int new_group_flag = 0;
     FILE *fp_group_file;
-    char group_name_ext[MAX_NAME_LENGTH + 3];    
+    char group_name_ext[MAX_NAME_LENGTH + 3];
 
     //** Check to see if a name has been given
     //*** If not send to name() routine

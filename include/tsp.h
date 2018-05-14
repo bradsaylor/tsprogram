@@ -74,6 +74,7 @@ extern char file_name[];	// data file name defined in tsp.c
 extern char group_name[];	// group file name defined in tsp.c
 extern char manifest_name[];	// .grp file manifest file name
 extern char auto_calc_status;
+extern char time_stamp[];
 
 //  output table char array
 	// 'last - 1' -> number of parameters including table header

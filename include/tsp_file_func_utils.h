@@ -3,6 +3,6 @@
 
 #include <stdio.h>
 
-int insert_parameter_data(int new_group_flag, FILE *fp);
+int append_parameter_data(char *name);
 
 #endif //TSP_FILE_FUNC_UTILS_H_

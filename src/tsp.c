@@ -19,6 +19,7 @@ char file_name[MAX_NAME_LENGTH];
 char group_name[MAX_NAME_LENGTH];
 char manifest_name[] = ".grp_manifest";
 char auto_calc_status;
+char time_stamp[50];
 
 //  string constants to define file header information
 char file_header_name[]		= "name:";
@@ -29,18 +30,12 @@ char group_header_ID[]	= "ID:";
 
 int main(void)
 {
-
     // local variables
     char input[MAX_VALUE_LENGTH];
     char selection[MAX_VALUE_LENGTH];
-    char time_stamp[50];
-
-    get_datestamp(time_stamp);
-    printf("\n%s\n", time_stamp);
 
     // run initialization function
     tsp_init();
-
 
     while (1) {
 	// print initial screen
