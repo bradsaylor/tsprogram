@@ -29,7 +29,7 @@ int append_to_file(char *name, char *add_string)
   int result = 0;
 
   fp = fopen(name, "a+");
-  result = fprintf(fp, "\n%s", add_string);
+  result = fprintf(fp, "%s\n", add_string);
   fclose(fp);
 
   return result;
@@ -375,25 +375,28 @@ int check_file_for_string(char *name, char *str, int search_buffer_size)
     FILE *fp;
 
     fp = fopen(name, "r");
-    file_char = getc(fp);
-
+    file_char = fgetc(fp);
     while(file_char != EOF) {
 	search_buffer[file_char_count] = file_char;
 	file_char_count++;
-	
+
+	// return 2 if search_buffer overflows
 	if(file_char_count >= (search_buffer_size - 1)) {
 	    printf("\nsearch buffer overload\n");
 	    return 2;
 	}
-	file_char = getc(fp);
+	file_char = fgetc(fp);
     }
 
     // place null terminator at end of read chars
     search_buffer[file_char_count + 1] = '\0';
 
-    if(strstr(search_buffer, str) != NULL) return 0;
-    
+    // if str is found return 0
+    if(strstr(search_buffer, str) != NULL) {
+	return 0;
+    }
 
+    // if str is not found return 1
     return 1;    
 }
 

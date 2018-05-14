@@ -23,9 +23,9 @@ char time_stamp[50];
 
 //  string constants to define file header information
 char file_header_name[]		= "name:";
-char file_header_modified[]	= "modified:";
+char file_header_date[]		= "date:";
 char file_header_target[]	= "target:";
-char group_header_ID[]	= "ID:";
+char group_header_ID[]		= "ID:";
 
 
 int main(void)

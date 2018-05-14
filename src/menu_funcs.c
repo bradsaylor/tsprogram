@@ -138,6 +138,33 @@ int name(void)
 
 int group(void)
 {
+   char  group_name_input[MAX_NAME_LENGTH];
+    int blank_name_check = 0;
+    int count = 0;
+
+    while (!blank_name_check) {
+	printf("Enter group name: ");
+	fgets(group_name_input, sizeof(group_name_input), stdin);
+
+	strcpy(group_name, group_name_input);
+
+	// if name is not blank set flag and exit loop
+	for (count = 0; count < (int) strlen(group_name); count++) {
+	    if (isalnum(group_name[count]))
+		blank_name_check = 1;
+	}
+    }
+
+    // replace ending line feed with string null termination
+    replace_char(group_name, 10, 0);
+
+    // replace any spaces or slashes with underscores
+    // promp if you did
+    if (replace_char(group_name, ' ', '_') ||
+	replace_char(group_name, '/', '_') ||
+	replace_char(group_name, '\\', '_')) {
+	printf("\nReformatted to -> %s", group_name);
+    }
 
     return 0;
 }
@@ -145,7 +172,6 @@ int group(void)
 int save(void)
 {
     int new_group_flag = 0;
-    FILE *fp_group_file;
     char group_name_ext[MAX_NAME_LENGTH + 3];
 
     //** Check to see if a name has been given
@@ -166,7 +192,6 @@ int save(void)
     //  Check .grp manifest file to see if group name exists
     //  if not then add it and set new group flag
     if(check_file_for_string(manifest_name, group_name, MAX_NAME_LENGTH * MAX_FILE_LENGTH) == 1) {
-	 printf("\n***got here matched***\n");
 	append_to_file(manifest_name, group_name);
 	new_group_flag = 1;
     }
@@ -178,20 +203,26 @@ int save(void)
 	char target_search_string[(int)strlen(file_header_target + 3)];
 	char target_replace_with[(int)strlen(file_header_target + 3)];
 	strcpy(target_search_string, file_header_target);
-	strcat(target_search_string, " Y");
+	strcat(target_search_string, "\tY");
 	strcpy(target_replace_with, file_header_target);
-	strcat(target_replace_with, " N");
+	strcat(target_replace_with, "\tN");
 
+        // if not a new group file
 	// if target Y string exits in file then re-write with target N string
 	// use while in case there are multiple target Y strings
-	while(check_file_for_string(group_name_ext, target_search_string, MAX_FILE_LINE * MAX_FILE_LENGTH) == 0){
-	    replace_file_string(
-		group_name_ext,	     target_search_string,
-		target_replace_with, MAX_FILE_LINE * MAX_FILE_LENGTH);
+
+	if(!new_group_flag) {
+	    while(check_file_for_string(group_name_ext, target_search_string,
+					MAX_FILE_LINE * MAX_FILE_LENGTH) == 0){
+		replace_file_string(
+		    group_name_ext,	     target_search_string,
+		    target_replace_with, MAX_FILE_LINE * MAX_FILE_LENGTH);
+	    }
 	}
     }
 
-    append_parameter_data(group_name_ext);
+    append_parameter_data(group_name_ext, new_group_flag);
+
     return 0;
 }
 

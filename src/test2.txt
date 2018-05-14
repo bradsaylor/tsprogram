@@ -1,9 +1,6 @@
-ID: brad
-
-
 name:	brad
-date:	2018-05-14 22:37:41
-target:	N
+date:	2018-05-14 22:09:13
+target:	Y
 fs:	****
 re:	****
 res:	****
@@ -16,11 +13,9 @@ cms:	****
 bl:	****
 spl:	****
 sd:	****
-
-
 name:	deanna
-date:	2018-05-14 22:37:44
-target:	Y
+date:	2018-05-14 22:09:30
+target: Y
 fs:	****
 re:	****
 res:	****

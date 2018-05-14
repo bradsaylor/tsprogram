@@ -84,7 +84,7 @@ char display_table[last - 1][num_param_attributes][table_cell_width + 1];
 
 //  string constants to define file header information
 extern char file_header_name[];
-extern char file_header_modified[];
+extern char file_header_date[];
 extern char file_header_target[];
 
 // string constants to define group file header information
