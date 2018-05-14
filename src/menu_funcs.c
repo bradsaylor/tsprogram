@@ -161,12 +161,12 @@ int save(void)
     }
 
     // string to hold group file name with file extension
-//    sprintf(group_name_ext, "%s%s", group_name, FILE_EXTENSION);
-    strcpy(group_name_ext, "sample_data");        
+    sprintf(group_name_ext, "%s%s", group_name, FILE_EXTENSION);
 
     //  Check .grp manifest file to see if group name exists
     //  if not then add it and set new group flag
     if(check_file_for_string(manifest_name, group_name, MAX_NAME_LENGTH * MAX_FILE_LENGTH) == 1) {
+	 printf("\n***got here matched***\n");
 	append_to_file(manifest_name, group_name);
 	new_group_flag = 1;
     }
@@ -191,7 +191,7 @@ int save(void)
 	}
     }
 
-//    insert_parameter_data(new_group_flag);
+    append_parameter_data(group_name_ext);
     return 0;
 }
 

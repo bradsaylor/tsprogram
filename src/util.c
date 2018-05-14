@@ -370,7 +370,7 @@ int print_table(int rows, int columns, int cell_size)
 int check_file_for_string(char *name, char *str, int search_buffer_size)
 {
     char search_buffer[search_buffer_size];
-    char file_char;
+    int file_char;
     int file_char_count = 0;
     FILE *fp;
 
