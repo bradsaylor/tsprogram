@@ -18,6 +18,6 @@
 ** Format group file to write out
 *** If target is being replaced then rewreite file replacing any 'Y' target string with 'N'
 ** Write out data
-*** append new data to the end of the file
+*** append new data to the end of the file with ': :' delimiters
 ** Sort .grp file by 'name' attribute
 ** Close file

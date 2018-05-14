@@ -145,6 +145,8 @@ int group(void)
 int save(void)
 {
     int new_group_flag = 0;
+    FILE *fp_group_file;
+    char group_name_ext[MAX_NAME_LENGTH + 3];    
 
     //** Check to see if a name has been given
     //*** If not send to name() routine
@@ -158,6 +160,10 @@ int save(void)
 	strcpy(group_name, file_name);
     }
 
+    // string to hold group file name with file extension
+//    sprintf(group_name_ext, "%s%s", group_name, FILE_EXTENSION);
+    strcpy(group_name_ext, "sample_data");        
+
     //  Check .grp manifest file to see if group name exists
     //  if not then add it and set new group flag
     if(check_file_for_string(manifest_name, group_name, MAX_NAME_LENGTH * MAX_FILE_LENGTH) == 1) {
@@ -165,7 +171,27 @@ int save(void)
 	new_group_flag = 1;
     }
 
-    insert_parameter_data(new_group_flag);
+    // if new file is group target check to see if group already has target
+    if(is_target_flag.file_target == 'Y'){
+
+	// + 3 to add space for '<SPC>' 'Y' and '\0'
+	char target_search_string[(int)strlen(file_header_target + 3)];
+	char target_replace_with[(int)strlen(file_header_target + 3)];
+	strcpy(target_search_string, file_header_target);
+	strcat(target_search_string, " Y");
+	strcpy(target_replace_with, file_header_target);
+	strcat(target_replace_with, " N");
+
+	// if target Y string exits in file then re-write with target N string
+	// use while in case there are multiple target Y strings
+	while(check_file_for_string(group_name_ext, target_search_string, MAX_FILE_LINE * MAX_FILE_LENGTH) == 0){
+	    replace_file_string(
+		group_name_ext,	     target_search_string,
+		target_replace_with, MAX_FILE_LINE * MAX_FILE_LENGTH);
+	}
+    }
+
+//    insert_parameter_data(new_group_flag);
     return 0;
 }
 

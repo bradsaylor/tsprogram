@@ -188,8 +188,41 @@ int print_table(int rows, int columns, int cell_size);
 __________________________________________________________________________ */
 
 int check_file_for_string(char *name, char *str, int search_buffer_size);
+/*
+  ***** check_file_for_string(char *name, char *str, int search_buffer_size) *****
+  Checks file 'name' for occurance of string 'str' using a search buffer of
+  maximum size 'search_buffer_size'
+
+  REQUIRES:  search_buffer_size -> max size of file
+             name               -> name of file to search
+             str                -> string to search for
+
+  RETURNS:  0 -> if 'str' is found in 'name'
+            1 -> if 'str' is not found in 'name'
+            2 -> if specified buffer size overflows
+
+  USES      <stdio.h> <string.h>
+__________________________________________________________________________ */
+
 
 int get_datestamp(char *str);
 
+int replace_file_string(char *name, char *old_str, char *new_str, int MAX_FILE_BUFFER);
+/*
+  ***** replace_file_string(char *name, char *old_str, char *new_str, in MAX_FILE_BUFFER) *****
+  Replaces first occurance of 'old_str' in file 'name' with the string 'new_str'.  The file
+  size to search is constrained to 'MAX_FILE_BUFFER' chars
+
+  REQUIRES:  MAX_FILE_BUFFER ->  Max file size
+             old_str         ->  string to replace
+             new_str         ->  string to replace with
+             name            ->  file name to search
+
+  RETURNS: 0 -> if successful
+           1 -> if 'old_str' not found
+           2 -> if file buffer overflows
+
+  USES:  <stdio.h> <string.h>
+__________________________________________________________________________ */
 
 #endif				//UTIL_H_

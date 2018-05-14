@@ -68,8 +68,8 @@ enum parameter_list		// enum to reference parameters as
 ******************************/
 extern struct parameter parameters[];	// array of paramters defined in
 					// tsp.c
-extern struct is_target is_target_flag;	// DON'T KNOW!!! SHOULD BE
-					// RESOLVED OR DELETED
+extern struct is_target is_target_flag;	// target flag for file and ref
+					
 extern char file_name[];	// data file name defined in tsp.c
 extern char group_name[];	// group file name defined in tsp.c
 extern char manifest_name[];	// .grp file manifest file name
@@ -80,5 +80,13 @@ extern char auto_calc_status;
 	// 'table_cell_width + 1' -> width of table cell plus '\0'
 	// terminator
 char display_table[last - 1][num_param_attributes][table_cell_width + 1];
+
+//  string constants to define file header information
+extern char file_header_name[];
+extern char file_header_modified[];
+extern char file_header_target[];
+
+// string constants to define group file header information
+extern char group_header_ID[];
 
 #endif				// TSP_H_

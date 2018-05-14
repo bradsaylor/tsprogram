@@ -20,6 +20,13 @@ char group_name[MAX_NAME_LENGTH];
 char manifest_name[] = ".grp_manifest";
 char auto_calc_status;
 
+//  string constants to define file header information
+char file_header_name[]		= "name:";
+char file_header_modified[]	= "modified:";
+char file_header_target[]	= "target:";
+char group_header_ID[]	= "ID:";
+
+
 int main(void)
 {
 

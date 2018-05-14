@@ -4,7 +4,7 @@
 #include "../include/tsp.h"
 #include "../include/util.h"
 
-int insert_parameter_data(int new_group_flag)
+int insert_parameter_data(int new_group_flag, FILE *fp)
 {
     int file_line_count = 0;
     int insert_point = 0;
@@ -14,11 +14,6 @@ int insert_parameter_data(int new_group_flag)
     char file_line[MAX_FILE_LINE];
     char parsed_name[MAX_NAME_LENGTH];
     char parsed_value[MAX_NAME_LENGTH];
-
-    //** Open file
-    char group_name_ext[MAX_NAME_LENGTH + 3];
-    sprintf(group_name_ext, "%s%s", group_name, FILE_EXTENSION);
-    fp_group_file = fopen(group_name_ext, "a+");
 
     //** Check to see if file size plus pending data will exceed limit
     //*** If so display error and exit back to main()
