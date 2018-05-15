@@ -1,0 +1,2 @@
+this is a placeholder so that git includes the obj directory which is
+needed for the makefile to run properly
