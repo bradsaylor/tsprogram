@@ -3,14 +3,15 @@
 int main()
 {
     // initialize name_array for dynamic allocation
-    name_array = malloc(malloc_size * sizeof(char *));
+    name_array = malloc(malloc_size * sizeof(char*));
     name_array[0] = malloc(MAX_NAME_LENGTH * sizeof(char));
 
     // open group file
     fp = fopen("brad.grp", "r");
 
     // read file into 'file_buffer'
-    while ((file_char = fgetc(fp)) != EOF) {
+    while((file_char = fgetc(fp)) != EOF)
+    {
 	file_buffer[read_count] = file_char;
 	read_count++;
     }
@@ -22,38 +23,34 @@ int main()
     tok = strtok(file_buffer, delim);
 
     // while more tokens exist in 'file_buffer'
-    while (tok != NULL) {
+    while(tok != NULL) {
 	// copy tokenized portion to 'tok_buffer'
 	strcpy(tok_buffer, tok);
 	// extract name from tok_buffer store in 'current_name'
 	extract_name(tok_buffer, current_name);
-	
 	// if 'current_name' is not empty
-	if (strcmp(current_name, "")) {
+	if(strcmp(current_name, "")) {
 	    // copy 'current_name' to 'name_array'
 	    strcpy(name_array[malloc_size - 1], current_name);
-	    
 	    // increment 'malloc_size' for next dynamic allocation
 	    malloc_size++;
 	    // allocate one more *char to name_array
 	    name_array = realloc(name_array, malloc_size * sizeof(char *));
-	    name_array[malloc_size - 1] =
-		malloc(MAX_NAME_LENGTH * sizeof(char));
+	    name_array[malloc_size - 1] = malloc(MAX_NAME_LENGTH * sizeof(char));
 	}
-	
 	// try to grab next token from 'file_buffer'
 	tok = strtok(NULL, delim);
     }
 
+
     // close group file
     fclose(fp);
 
-    for (int count = 0; count < malloc_size - 1; count++) {
+    for(int count = 0; count < malloc_size - 1; count++) {
 	printf("%s\n", name_array[count]);
     }
 
-    // free allcoated 'name_array' elements and the array itself
-    for (count = 0; count < malloc_size; count++) {
+    for(count = 0; count < malloc_size; count++) {
 	free(name_array[count]);
     }
     free(name_array);
@@ -66,21 +63,22 @@ int extract_name(char *str, char *current_name)
     char *location;
     int char_count = 0;
 
+    // assign 'current_name' to empty string
+    strcpy(current_name, "");
+    
     // if "name:" exists in tok_buffer assign 'location' to its address
-    if ((location = strstr(str, "name:")) != NULL) {
+    if((location = strstr(str, "name:")) != NULL) {
 	// increment address to skip over "name: "
-	location += sizeof(char) * 6;
+	location += sizeof(char)*6;
 	// read chars into 'current_name' until '\n' encountered
-	while (*location != '\n') {
+	while(*location != '\n') {
 	    current_name[char_count] = *location;
 	    // increment counter to keep track of 'current_array' index
 	    char_count++;
 	    // move 'location' ahead one char
 	    location += sizeof(char);
 	}
-	// terminate 'current_name' with null char for string operations
-	current_name[char_count] = '\0';
     }
-
+    
     return 0;
 }
