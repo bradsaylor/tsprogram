@@ -3,7 +3,8 @@
 int main()
 {
     // initialize name_array for dynamic allocation
-    name_array = (char **)malloc(malloc_size);
+    name_array = malloc(malloc_size * sizeof(char*));
+    name_array[0] = malloc(MAX_NAME_LENGTH * sizeof(char));
 
     // open group file
     fp = fopen("brad.grp", "r");
@@ -14,6 +15,7 @@ int main()
 	file_buffer[read_count] = file_char;
 	read_count++;
     }
+
     // append null char to 'file_buffer' for string operations
     file_buffer[read_count + 1] = '\0';
 
@@ -29,27 +31,28 @@ int main()
 	// if 'current_name' is not empty
 	if(strcmp(current_name, "")) {
 	    // copy 'current_name' to 'name_array'
-	    strcpy(name_array[malloc_size], current_name);
+	    strcpy(name_array[malloc_size - 1], current_name);
 	    // increment 'malloc_size' for next dynamic allocation
 	    malloc_size++;
 	    // allocate one more *char to name_array
-	    name_array = (char **) realloc(name_array, malloc_size);
-
-	    for(count = 0; count < malloc_size; count++) {
-		
-	    }
+	    name_array = realloc(name_array, malloc_size * sizeof(char *));
+	    name_array[malloc_size - 1] = malloc(MAX_NAME_LENGTH * sizeof(char));
 	}
 	// try to grab next token from 'file_buffer'
 	tok = strtok(NULL, delim);
     }
 
+
     // close group file
     fclose(fp);
 
-    for(int count = 0; count < malloc_size; count++) {
+    for(int count = 0; count < malloc_size - 1; count++) {
 	printf("%s\n", name_array[count]);
     }
-    printf("\n size is: %d\n", malloc_size);
+
+    for(count = 0; count < malloc_size; count++) {
+	free(name_array[count]);
+    }
     free(name_array);
 
     return 0;
