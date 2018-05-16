@@ -225,4 +225,20 @@ int replace_file_string(char *name, char *old_str, char *new_str, int MAX_FILE_B
   USES:  <stdio.h> <string.h>
 __________________________________________________________________________ */
 
+int strcmp_no_case(char *str1, char *str2);
+/*
+  ***** int strcmp_no_case(char *str1, char *str2) *****
+  Identical funtionality to strcmp() function except ignores case
+
+REQUIRES:  str1 -> string to compare
+           str2 -> string to compare against
+
+RETURNS: <0 -> if str1 is before str2 in alphabet (case insensitive)    
+         >0 -> if str1 is after str2 in alphabet (case insensitive)
+          0 -> if str1 is identical to str2 (case insensitive)
+
+USES:  <string.h> <ctype.h>
+__________________________________________________________________________ */
+
+
 #endif				//UTIL_H_

@@ -3,7 +3,7 @@
 
 int main()
 {
-    // initialize name_array for dynamic allocation
+     // initialize name_array for dynamic allocation
     name_array = malloc(malloc_size * sizeof(char *));
     name_array[0] = malloc(MAX_NAME_LENGTH * sizeof(char));
 
@@ -18,9 +18,11 @@ int main()
 
     // append null char to 'file_buffer' for string operations
     file_buffer[read_count + 1] = '\0';
+    strcpy(file_tokenized, file_buffer);
+
 
     // initialize strtok operation on 'file_buffer'
-    tok = strtok(file_buffer, delim);
+    tok = strtok(file_tokenized, delim);
 
     // while more tokens exist in 'file_buffer'
     while (tok != NULL) {
@@ -53,7 +55,33 @@ int main()
     }
     printf("\n");
 
+    // sort name_array alphabetically ignore case
     sort_names(name_array, malloc_size);
+
+    temp_file = fopen("temp_sort", "w");
+
+    // initialize strtok operation on 'file_buffer'
+    strcpy(file_tokenized, file_buffer);
+    tok = strtok(file_tokenized, delim);
+    fprintf(temp_file, tok);
+
+
+    for(count = 0; count < malloc_size; count++) {
+        // initialize strtok operation on 'file_buffer'
+        strcpy(file_tokenized, file_buffer);
+        tok = strtok(file_tokenized, delim);
+
+	while(tok != NULL) {
+	    strcpy(tok_buffer, tok);
+	    extract_name(tok_buffer, current_name);
+	    if(!strcmp(current_name, name_array[count])) {
+		fprintf(temp_file,"$");
+		fprintf(temp_file, "%s", tok_buffer);
+	    }
+	    tok = strtok(NULL, delim);
+	}
+    }
+    fclose(temp_file);
 
     for (int count = 0; count < malloc_size - 1; count++) {
 	printf("%s\n", name_array[count]);
@@ -87,7 +115,7 @@ int extract_name(char *str, char *current_name)
 	}
 	// terminate 'current_name' with null char for string operations
 	current_name[char_count] = '\0';
-    }
+    }else current_name[char_count] = '\0';
 
     return 0;
 }
@@ -97,9 +125,6 @@ int sort_names(char **name_array, int array_size)
     int made_change_flag = 1;
     int count = 0;
     char temp[MAX_NAME_LENGTH];
-    char str1_lower_case[MAX_NAME_LENGTH];
-    char str2_lower_case[MAX_NAME_LENGTH];
-    
 
     while(made_change_flag) {
 	made_change_flag = 0;

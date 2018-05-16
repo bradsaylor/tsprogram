@@ -470,7 +470,6 @@ int replace_file_string(char *name, char* old_str, char *new_str, int MAX_FILE_B
 
 int strcmp_no_case(char *str1, char *str2) {
 
-    int result;
     int count = 0;
     char str1_lower_case[strlen(str1) + 1];
     char str2_lower_case[strlen(str2) + 1];
@@ -478,11 +477,11 @@ int strcmp_no_case(char *str1, char *str2) {
     str1_lower_case[strlen(str1)] = '\0';
     str2_lower_case[strlen(str2)] = '\0';
 
-    for(count = 0; count < strlen(str1); count++) {
+    for(count = 0; count < (int)strlen(str1); count++) {
 	str1_lower_case[count] = tolower(str1[count]);
     }
 
-    for(count = 0; count < strlen(str2); count++) {
+    for(count = 0; count < (int)strlen(str2); count++) {
 	str2_lower_case[count] = tolower(str2[count]);
     }
 
