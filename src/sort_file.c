@@ -50,21 +50,21 @@ int main()
     // close group file
     fclose(fp);
 
-    for (int count = 0; count < malloc_size - 1; count++) {
+/*    for (int count = 0; count < malloc_size - 1; count++) {
 	printf("%s\n", name_array[count]);
     }
     printf("\n");
+*/
 
     // sort name_array alphabetically ignore case
     sort_names(name_array, malloc_size);
 
     temp_file = fopen("temp_sort", "w");
 
-    // initialize strtok operation on 'file_buffer'
+    // write out group file header
     strcpy(file_tokenized, file_buffer);
     tok = strtok(file_tokenized, delim);
-    fprintf(temp_file, tok);
-
+    fprintf(temp_file, "%s", tok);
 
     for(count = 0; count < malloc_size; count++) {
         // initialize strtok operation on 'file_buffer'
@@ -74,19 +74,21 @@ int main()
 	while(tok != NULL) {
 	    strcpy(tok_buffer, tok);
 	    extract_name(tok_buffer, current_name);
-	    if(!strcmp(current_name, name_array[count])) {
-		fprintf(temp_file,"$");
-		fprintf(temp_file, "%s", tok_buffer);
-	    }
+	    if(strcmp(current_name, "")) {
+		if(!strcmp(current_name, name_array[count])) {
+		    fprintf(temp_file,"$");
+		    fprintf(temp_file, "%s", tok_buffer);
+		}
+	    }	    
 	    tok = strtok(NULL, delim);
 	}
     }
     fclose(temp_file);
 
-    for (int count = 0; count < malloc_size - 1; count++) {
+/*    for (int count = 0; count < malloc_size - 1; count++) {
 	printf("%s\n", name_array[count]);
     }
-
+*/
     // free allcoated 'name_array' elements and the array itself
     for (count = 0; count < malloc_size; count++) {
 	free(name_array[count]);

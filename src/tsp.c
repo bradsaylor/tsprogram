@@ -48,7 +48,7 @@ int main(void)
 	if (fgets(input, sizeof(selection), stdin) != NULL) {
 	    sscanf(input, "%s", selection);
 	}
-	if (!strcmp(selection, "x"))
+	if (!strcmp(selection, "q"))
 	    return 0;
 	// validate input
 	if (validate_input(selection))

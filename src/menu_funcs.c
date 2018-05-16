@@ -223,6 +223,8 @@ int save(void)
 
     append_parameter_data(group_name_ext, new_group_flag);
 
+    sort_group_file(group_name_ext);
+
     return 0;
 }
 

@@ -4,5 +4,8 @@
 #include <stdio.h>
 
 int append_parameter_data(char *name, int new_group_flag);
+int sort_group_file(char *file_name);
+int extract_name(char *str, char *current_name);
+int sort_names(char **name_array, int array_size);
 
 #endif //TSP_FILE_FUNC_UTILS_H_

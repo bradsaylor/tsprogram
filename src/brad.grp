@@ -1,8 +1,9 @@
 ID: brad
 
 
-name:	brad
-date:	2018-05-14 22:37:41
+$
+name:	albertina
+date:	2018-05-16 12:37:19
 target:	N
 fs:	****
 re:	****
@@ -17,10 +18,10 @@ bl:	****
 spl:	****
 sd:	****
 
-
-name:	deanna
-date:	2018-05-14 22:37:44
-target:	Y
+$
+name:	brad
+date:	2018-05-16 12:37:13
+target:	N
 fs:	****
 re:	****
 res:	****
@@ -34,4 +35,37 @@ bl:	****
 spl:	****
 sd:	****
 
+$
+name:	deanna
+date:	2018-05-16 12:37:09
+target:	N
+fs:	****
+re:	****
+res:	****
+qms:	****
+qes:	****
+qts:	****
+vas:	****
+mms:	****
+cms:	****
+bl:	****
+spl:	****
+sd:	****
+
+$
+name:	owen
+date:	2018-05-16 12:37:04
+target:	N
+fs:	****
+re:	****
+res:	****
+qms:	****
+qes:	****
+qts:	****
+vas:	****
+mms:	****
+cms:	****
+bl:	****
+spl:	****
+sd:	****
 

@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <fcntl.h>
 #include <time.h>
+#include <ctype.h>
 
 #include "../include/util.h"
 
@@ -465,4 +466,25 @@ int replace_file_string(char *name, char* old_str, char *new_str, int MAX_FILE_B
     remove(temp_file_name);
 
     return 0;
+}
+
+int strcmp_no_case(char *str1, char *str2) {
+
+    int count = 0;
+    char str1_lower_case[strlen(str1) + 1];
+    char str2_lower_case[strlen(str2) + 1];
+
+    str1_lower_case[strlen(str1)] = '\0';
+    str2_lower_case[strlen(str2)] = '\0';
+
+    for(count = 0; count < (int)strlen(str1); count++) {
+	str1_lower_case[count] = tolower(str1[count]);
+    }
+
+    for(count = 0; count < (int)strlen(str2); count++) {
+	str2_lower_case[count] = tolower(str2[count]);
+    }
+
+    return strcmp(str1_lower_case, str2_lower_case);
+
 }
