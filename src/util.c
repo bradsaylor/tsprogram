@@ -488,3 +488,27 @@ int strcmp_no_case(char *str1, char *str2) {
     return strcmp(str1_lower_case, str2_lower_case);
 
 }
+
+int return_file_as_string(char *name, char *file_str, int max_buffer_size)
+{
+    FILE *fp;
+    char file_buffer[max_buffer_size];
+    int file_char;
+    int read_count = 0;
+
+    fp = fopen(name, "r");
+
+    while((file_char = fgetc(fp)) != EOF)
+    {
+	file_buffer[read_count] = file_char;
+	read_count++;
+	if(read_count == (max_buffer_size - 2)) {
+	    printf("buffer overflow\n");
+	    return 1;
+	}
+    }
+    file_buffer[read_count] = '\0';
+    sprintf(file_str, "%s", file_buffer);
+    
+    return 0;
+}

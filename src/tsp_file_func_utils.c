@@ -51,71 +51,18 @@ int sort_group_file(char *file_name)
     char file_tokenized[MAX_FILE_LINE * MAX_FILE_LENGTH];
     char tok_buffer[last * MAX_FILE_LINE];
     char current_name[MAX_NAME_LENGTH];
-    char **name_array;
-
-    int read_count = 0;
+    char **name_array = NULL;
     int malloc_size = 1;
+    int elements_to_free = 0;
     int count = 0;
-
     char *tok;
-    int file_char;
     const char delim[2] = "$";
-
-    FILE *fp;
     FILE *temp_file;
 
-     // initialize name_array for dynamic allocation
-    name_array = malloc(malloc_size * sizeof(char *));
-    name_array[0] = malloc(MAX_NAME_LENGTH * sizeof(char));
+    return_file_as_string(file_name, file_buffer, sizeof(file_buffer));
 
-    // open group file
-    fp = fopen(file_name, "r");
-
-    // read file into 'file_buffer'
-    while ((file_char = fgetc(fp)) != EOF) {
-	file_buffer[read_count] = file_char;
-	read_count++;
-    }
-
-    // append null char to 'file_buffer' for string operations
-    file_buffer[read_count + 1] = '\0';
-    strcpy(file_tokenized, file_buffer);
-
-
-    // initialize strtok operation on 'file_buffer'
-    tok = strtok(file_tokenized, delim);
-
-    // while more tokens exist in 'file_buffer'
-    while (tok != NULL) {
-	// copy tokenized portion to 'tok_buffer'
-	strcpy(tok_buffer, tok);
-	// extract name from tok_buffer store in 'current_name'
-	extract_name(tok_buffer, current_name);
-	
-	// if 'current_name' is not empty
-	if (strcmp(current_name, "")) {
-	    // copy 'current_name' to 'name_array'
-	    strcpy(name_array[malloc_size - 1], current_name);
-	    // increment 'malloc_size' for next dynamic allocation
-	    malloc_size++;
-	    // allocate one more *char to name_array
-	    name_array = realloc(name_array, malloc_size * sizeof(char *));
-	    name_array[malloc_size - 1] =
-		malloc(MAX_NAME_LENGTH * sizeof(char));
-	}
-	
-	// try to grab next token from 'file_buffer'
-	tok = strtok(NULL, delim);
-    }
-
-    // close group file
-    fclose(fp);
-
-/*    for (int count = 0; count < malloc_size - 1; count++) {
-	printf("%s\n", name_array[count]);
-    }
-    printf("\n");
-*/
+    elements_to_free = build_file_name_array(&name_array, file_buffer);
+    malloc_size = elements_to_free;
 
     // sort name_array alphabetically ignore case
     sort_names(name_array, malloc_size);
@@ -146,12 +93,8 @@ int sort_group_file(char *file_name)
     }
     fclose(temp_file);
 
-/*    for (int count = 0; count < malloc_size - 1; count++) {
-	printf("%s\n", name_array[count]);
-    }
-*/
     // free allcoated 'name_array' elements and the array itself
-    for (count = 0; count < malloc_size; count++) {
+    for (count = 0; count < elements_to_free; count++) {
 	free(name_array[count]);
     }
     free(name_array);
@@ -165,6 +108,50 @@ int sort_group_file(char *file_name)
 /********************************************
  ***** SORT_GROUP_FILE() UTILITIES
  ******************************************/
+int build_file_name_array(char ***name_array, char *file_buffer)
+{
+    char file_tokenized[MAX_FILE_LINE * MAX_FILE_LENGTH];
+    const char delim[2] = "$";
+    char *tok;
+    int malloc_size = 1;
+    char tok_buffer[last * MAX_FILE_LINE];    
+    char current_name[MAX_NAME_LENGTH];
+    
+    strcpy(file_tokenized, file_buffer);
+    
+    // initialize strtok operation on 'file_buffer'
+    tok = strtok(file_tokenized, delim);
+    
+    // initialize 'name_array' for dynamic allocation
+    (*name_array) = malloc(malloc_size * sizeof(char *));
+    (*name_array[0]) = malloc(MAX_NAME_LENGTH * sizeof(char));
+    
+    // while more tokens exist in 'file_buffer'
+    while (tok != NULL) {
+	// copy tokenized portion to 'tok_buffer'
+	strcpy(tok_buffer, tok);
+	// extract name from tok_buffer store in 'current_name'
+	extract_name(tok_buffer, current_name);
+	
+	// if 'current_name' is not empty
+	if (strcmp(current_name, "")) {
+	    // copy 'current_name' to 'name_array'
+	    strcpy((*name_array)[malloc_size - 1], current_name);
+	    
+	    // increment 'malloc_size' for next dynamic allocation
+	    malloc_size++;
+	    // allocate one more *char to name_array
+	    (*name_array) = realloc((*name_array), malloc_size * sizeof(char *));
+	    (*name_array)[malloc_size - 1] =
+		malloc(MAX_NAME_LENGTH * sizeof(char));
+	}
+	
+	// try to grab next token from 'file_buffer'
+	tok = strtok(NULL, delim);
+    }
+
+    return malloc_size;
+}
 
 int extract_name(char *str, char *current_name)
 {

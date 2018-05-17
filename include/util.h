@@ -240,5 +240,19 @@ RETURNS: <0 -> if str1 is before str2 in alphabet (case insensitive)
 USES:  <string.h> <ctype.h>
 __________________________________________________________________________ */
 
+int return_file_as_string(char *name, char *file_str, int max_buffer_size);
+/*
+  ***** int return_file_as_string(char *name, char *file_str, int max_buffer_size) *****
+  Places contents of file 'name' into prepared string 'file_str' using 'max_buffer_size' chars
+
+REQUIRES:  max_buffer_size -> maximum number of chars to store, usually strlen(file_str)
+           file_str        -> string in which to store file chars
+           name            -> file to convert to string
+
+RETURNS:  0 -> if successful
+          1 -> if number of file chars exceeds 'max_buffer_size'
+
+USES:  <stdio.h> <string.h>
+__________________________________________________________________________ */
 
 #endif				//UTIL_H_

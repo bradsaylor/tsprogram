@@ -1,0 +1,6 @@
+You can understand M-y in terms of a last-yank pointer which points at an entry in the kill ring.
+Each time you kill, the last-yank pointer moves to the newly made entry at the front of the ring.
+C-y yanks the entry which the last-yank pointer points to. M-y moves the last-yank pointer to a
+different entry, and the text in the buffer changes to match. Enough M-y commands can move the
+pointer to any entry in the ring, so you can get any entry into the buffer. Eventually the pointer
+reaches the end of the ring; the next M-y loops back around to the first entry again.
