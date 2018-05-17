@@ -4,6 +4,8 @@
 #include <fcntl.h>
 #include <time.h>
 #include <ctype.h>
+#include <termios.h>
+#include <unistd.h>
 
 #include "../include/util.h"
 
@@ -43,7 +45,7 @@ int list_file_numbered(char *name, int max_file_line)
   int line_number = 0;
 
   fp = fopen(name, "r");
-  if(fp == NULL) return 1;
+  if(fp == NULL) return -1;
 
   while(fgets(file_line, max_file_line, fp) != NULL)
   {
@@ -53,7 +55,7 @@ int list_file_numbered(char *name, int max_file_line)
 
   fclose(fp);
 
-  return 0;
+  return line_number;
 }
 
 int count_file_lines(char *name, int max_file_line)
@@ -285,10 +287,6 @@ int search_file_delimited(char *name, char *delim_f, char *delim_b, char *search
 
   return 0;
 }
-
-#include <termios.h>
-#include <unistd.h>
-#include <stdio.h>
 
 int getch(void)
 {

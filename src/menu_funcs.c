@@ -230,7 +230,45 @@ int save(void)
 
 int open(void)
 {
+    char input[MAX_VALUE_LENGTH];
+    char selection[MAX_VALUE_LENGTH];
+    char open_group[MAX_NAME_LENGTH];
+    int max_selection;
+    FILE *fp_manifest;
+    char group_name_ext[MAX_NAME_LENGTH + 3];
 
+
+    // clear screen
+    for (int count = 0; count < 50; count ++) printf("\n");
+
+    // list group files in .grp manifest
+    max_selection = list_file_numbered(manifest_name, MAX_FILE_LINE);
+    printf("select group file: ");
+
+    // prompt for an store user selection
+    if(fgets(input, sizeof(selection), stdin) != NULL) {
+	sscanf(input, "%s", selection);
+    }
+
+    // verify input is in allowable range
+    if((atoi(selection) < 1) || (atoi(selection) > max_selection)) {
+	rewind_line("Invalid input");
+	return 1;
+    }
+
+    // read group file name from manifest file
+    fp_manifest = fopen(manifest_name, "r");
+    for(int count = 0; count < atoi(selection); count++) {
+        fgets(open_group, MAX_FILE_LINE, fp_manifest);
+    }
+    fclose(fp_manifest);
+    // replace ending '\n' with '\0'
+    replace_char(open_group, 10, 0);
+
+    // append .grp extension and store in 'group_name_ext'
+    sprintf(group_name_ext, "%s%s", open_group, FILE_EXTENSION);
+
+    printf("'%s'\n", group_name_ext);
     return 0;
 }
 

@@ -50,6 +50,7 @@ int main(void)
 	}
 	if (!strcmp(selection, "q"))
 	    return 0;
+
 	// validate input
 	if (validate_input(selection))
 	    printf("\n%s is bad input!\n", selection);
