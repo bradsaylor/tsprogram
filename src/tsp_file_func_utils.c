@@ -45,7 +45,7 @@ int append_parameter_data(char *name, int new_group_flag)
     return 0;
 }
 
-int sort_group_file(char *file_name)
+int sort_group_file(char *file)
 {
     char file_buffer[MAX_FILE_LINE * MAX_FILE_LENGTH];
     char file_tokenized[MAX_FILE_LINE * MAX_FILE_LENGTH];
@@ -59,22 +59,24 @@ int sort_group_file(char *file_name)
     const char delim[2] = "$";
     FILE *temp_file;
 
-    return_file_as_string(file_name, file_buffer, sizeof(file_buffer));
-
-    elements_to_free = build_file_name_array(&name_array, file_buffer);
+    elements_to_free = build_file_name_array(file, &name_array);
     malloc_size = elements_to_free;
 
     // sort name_array alphabetically ignore case
     sort_names(name_array, malloc_size);
 
     temp_file = fopen("temp_sort", "w");
-
+    
+    return_file_as_string(file, file_buffer, sizeof(file_buffer));
+    
     // write out group file header
     strcpy(file_tokenized, file_buffer);
     tok = strtok(file_tokenized, delim);
     fprintf(temp_file, "%s", tok);
 
+    // if current name matches tokenized section print to file
     for(count = 0; count < malloc_size; count++) {
+	
         // initialize strtok operation on 'file_buffer'
         strcpy(file_tokenized, file_buffer);
         tok = strtok(file_tokenized, delim);
@@ -99,8 +101,8 @@ int sort_group_file(char *file_name)
     }
     free(name_array);
 
-    remove(file_name);
-    rename("temp_sort", file_name);
+    remove(file);
+    rename("temp_sort", file);
 
     return 0;
 }
@@ -108,15 +110,17 @@ int sort_group_file(char *file_name)
 /********************************************
  ***** SORT_GROUP_FILE() UTILITIES
  ******************************************/
-int build_file_name_array(char ***name_array, char *file_buffer)
+int build_file_name_array(char *name, char ***name_array)
 {
     char file_tokenized[MAX_FILE_LINE * MAX_FILE_LENGTH];
+    char file_buffer[MAX_FILE_LINE * MAX_FILE_LENGTH];    
     const char delim[2] = "$";
     char *tok;
     int malloc_size = 1;
     char tok_buffer[last * MAX_FILE_LINE];    
     char current_name[MAX_NAME_LENGTH];
-    
+
+    return_file_as_string(name, file_buffer, sizeof(file_buffer));
     strcpy(file_tokenized, file_buffer);
     
     // initialize strtok operation on 'file_buffer'

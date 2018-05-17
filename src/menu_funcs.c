@@ -98,7 +98,7 @@ int edit(int parameter_index)
     fgets(new_value, sizeof(new_value), stdin);
     replace_char(new_value, 10, 0);
     //+1 to account for table header parameter
-    strcpy(parameters[parameter_index + 1].value, new_value);
+    strcpy(parameters[parameter_index + 2].value, new_value);
 
     return 0;
 }
@@ -238,7 +238,13 @@ int open(void)
     char group_name_ext[MAX_NAME_LENGTH + 3];
     char **name_array;
     char group_file_buffer[MAX_FILE_LINE * MAX_FILE_LENGTH];
+    char group_file_tokenized[MAX_FILE_LINE * MAX_FILE_LENGTH];
     int elements_to_free = 0;
+    char *tok;
+    const char delim[2] = "$";
+    char tok_buffer[last * MAX_FILE_LINE];
+    char current_name[MAX_NAME_LENGTH];
+
 
 
     // clear screen
@@ -272,7 +278,7 @@ int open(void)
     sprintf(group_name_ext, "%s%s", open_group, FILE_EXTENSION);
 
     return_file_as_string(group_name_ext, group_file_buffer, sizeof(group_file_buffer));
-    elements_to_free = build_file_name_array(&name_array, group_file_buffer);
+    elements_to_free = build_file_name_array(group_name_ext, &name_array);
 
     // clear screen
     for (int count = 0; count < 50; count ++) printf("\n");
@@ -294,6 +300,36 @@ int open(void)
     if((atoi(selection) < 1) || (atoi(selection) > (elements_to_free - 1))) {
 	rewind_line("Invalid input");
 	return 1;
+    }
+
+    strcpy(group_file_tokenized, group_file_buffer);
+
+    // initialize strtok operation on 'group_file_buffer'
+    strcpy(group_file_tokenized, group_file_buffer);
+    tok = strtok(group_file_tokenized, delim);
+
+    while(tok != NULL) {
+	strcpy(tok_buffer, tok);
+	extract_name(tok_buffer, current_name);
+	if(strcmp(current_name, "")) {
+	    if(!strcmp(current_name, name_array[atoi(selection) - 1])) {
+		char search_string[MAX_VALUE_LENGTH];
+		char *location;
+		char extracted_value[MAX_VALUE_LENGTH];
+
+		for(int count = 2; count < last; count++) {
+		    strcpy(search_string, parameters[count].name);
+		    strcat(search_string, ":\t");
+		    location = strstr(tok_buffer, search_string);
+		    location += sizeof(char) * strlen(search_string);
+		    sscanf(location, "%s", extracted_value);
+		    printf("'%s'\n", extracted_value);
+		    strcpy(parameters[count].value, extracted_value);
+		}
+
+	    }
+	}	    
+	tok = strtok(NULL, delim);
     }
 
 
