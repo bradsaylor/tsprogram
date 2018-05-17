@@ -24,8 +24,8 @@ int list_file_numbered(char *name, int max_file_line);
   REQUIRES:  max_file_line -> Max number of chars in a file line
              name          -> Name of file
 
-  RETURNS:  0 -> if file was opened sucessfully
-            1 -> if file did not open successfully
+  RETURNS:  lines printed  -> if file was opened sucessfully
+                      -1   -> if file did not open successfully
 _______________________________________________________________ */
 
 int check_file_length(char *name, int max_file_size, int max_file_line);
@@ -144,6 +144,8 @@ int getch(void);
   REQUIRES:  nothing
 
   RETURNS: ch -> entered character
+
+  USES:  <termios.h> <unistd.h> <stdio.h>
 __________________________________________________________________________ */
 
 int rewind_line(char *print_string);
@@ -203,7 +205,6 @@ int check_file_for_string(char *name, char *str, int search_buffer_size);
 
   USES      <stdio.h> <string.h>
 __________________________________________________________________________ */
-
 
 int get_datestamp(char *str);
 
