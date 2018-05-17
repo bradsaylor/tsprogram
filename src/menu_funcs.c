@@ -236,6 +236,9 @@ int open(void)
     int max_selection;
     FILE *fp_manifest;
     char group_name_ext[MAX_NAME_LENGTH + 3];
+    char **name_array;
+    char group_file_buffer[MAX_FILE_LINE * MAX_FILE_LENGTH];
+    int elements_to_free = 0;
 
 
     // clear screen
@@ -268,7 +271,37 @@ int open(void)
     // append .grp extension and store in 'group_name_ext'
     sprintf(group_name_ext, "%s%s", open_group, FILE_EXTENSION);
 
-    printf("'%s'\n", group_name_ext);
+    return_file_as_string(group_name_ext, group_file_buffer, sizeof(group_file_buffer));
+    elements_to_free = build_file_name_array(&name_array, group_file_buffer);
+
+    // clear screen
+    for (int count = 0; count < 50; count ++) printf("\n");
+    
+    for (int count = 0; count < (elements_to_free - 1); count++) {
+	printf("[%d] %s\n", count + 1, name_array[count]);
+    }
+
+    // list group files in .grp manifest
+    max_selection = elements_to_free - 1;
+    printf("select file: ");
+    
+    // prompt for an store user selection
+    if(fgets(input, sizeof(selection), stdin) != NULL) {
+	sscanf(input, "%s", selection);
+    }
+
+    // verify input is in allowable range
+    if((atoi(selection) < 1) || (atoi(selection) > (elements_to_free - 1))) {
+	rewind_line("Invalid input");
+	return 1;
+    }
+
+
+    for(int count = 0; count < elements_to_free; count++) {
+	free(name_array[count]);
+    }
+    free(name_array);
+
     return 0;
 }
 
