@@ -3,7 +3,7 @@ ID: brad
 
 $
 name:	brad
-date:	2018-05-17 22:19:04
+date:	2018-05-18 09:21:18
 target:	N
 fs:	****
 re:	****
@@ -19,17 +19,68 @@ spl:	****
 sd:	****
 
 $
-name:	d
-date:	2018-05-17 22:19:35
+name:	deanna
+date:	2018-05-18 09:21:47
 target:	N
 fs:	1
 re:	2
 res:	3
 qms:	4
 qes:	5
-qts:	****
-vas:	****
+qts:	6
+vas:	7
 mms:	****
+cms:	****
+bl:	****
+spl:	****
+sd:	****
+
+$
+name:	deanna
+date:	2018-05-18 09:22:36
+target:	N
+fs:	1
+re:	2
+res:	3
+qms:	4
+qes:	5
+qts:	6
+vas:	7
+mms:	8
+cms:	****
+bl:	****
+spl:	****
+sd:	****
+
+$
+name:	deanna
+date:	2018-05-18 09:21:47
+target:	N
+fs:	1
+re:	2
+res:	3
+qms:	4
+qes:	5
+qts:	6
+vas:	7
+mms:	****
+cms:	****
+bl:	****
+spl:	****
+sd:	****
+
+$
+name:	deanna
+date:	2018-05-18 09:22:36
+target:	N
+fs:	1
+re:	2
+res:	3
+qms:	4
+qes:	5
+qts:	6
+vas:	7
+mms:	8
 cms:	****
 bl:	****
 spl:	****

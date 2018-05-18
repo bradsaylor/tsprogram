@@ -7,6 +7,7 @@
 #include "../include/tsp.h"
 #include "../include/util.h"
 #include "../include/tsp_file_func_utils.h"
+#include "../include/tsp_display.h"
 
 int validate_input(char *input)
 {
@@ -92,13 +93,19 @@ int menu(void)
 
 int edit(int parameter_index)
 {
+    int name_check = 0;
+    
     char new_value[MAX_VALUE_LENGTH];
+    if(!strcmp(file_name, empty_label)) name_check=name();
+    if(name_check) return 1;
 
-    printf("Enter value for %s: ", parameters[parameter_index].name);
+    printf("Enter value for %s: ", parameters[parameter_index + 1].name);
     fgets(new_value, sizeof(new_value), stdin);
     replace_char(new_value, 10, 0);
     //+1 to account for table header parameter
-    strcpy(parameters[parameter_index + 2].value, new_value);
+    strcpy(parameters[parameter_index + 1].value, new_value);
+
+    file_saved_flag = NO;
 
     return 0;
 }
@@ -113,7 +120,11 @@ int name(void)
 	printf("Enter file name: ");
 	fgets(file_name_input, sizeof(file_name_input), stdin);
 
+        if(!strcmp(file_name_input, "\n")) return 1;
 	strcpy(file_name, file_name_input);
+	
+        // replace ending line feed with string null termination
+        replace_char(file_name, 10, 0);
 
 	// if name is not blank set flag and exit loop
 	for (count = 0; count < (int) strlen(file_name); count++) {
@@ -122,9 +133,6 @@ int name(void)
 	}
     }
 
-    // replace ending line feed with string null termination
-    replace_char(file_name, 10, 0);
-
     // replace any spaces or slashes with underscores
     // promp if you did
     if (replace_char(file_name, ' ', '_') ||
@@ -132,6 +140,8 @@ int name(void)
 	replace_char(file_name, '\\', '_')) {
 	printf("\nReformatted to -> %s", file_name);
     }
+
+    file_saved_flag = NO;
 
     return 0;
 }
@@ -225,6 +235,8 @@ int save(void)
 
     sort_group_file(group_name_ext);
 
+    file_saved_flag = YES;
+
     return 0;
 }
 
@@ -233,6 +245,7 @@ int open(void)
     char input[MAX_VALUE_LENGTH];
     char selection[MAX_VALUE_LENGTH];
     char open_group[MAX_NAME_LENGTH];
+    char open_file[MAX_NAME_LENGTH];
     int max_selection;
     FILE *fp_manifest;
     char group_name_ext[MAX_NAME_LENGTH + 3];
@@ -244,11 +257,9 @@ int open(void)
     const char delim[2] = "$";
     char tok_buffer[last * MAX_FILE_LINE];
     char current_name[MAX_NAME_LENGTH];
-
-
-
+    
     // clear screen
-    for (int count = 0; count < 50; count ++) printf("\n");
+    clear_screen();
 
     // list group files in .grp manifest
     max_selection = list_file_numbered(manifest_name, MAX_FILE_LINE);
@@ -281,17 +292,17 @@ int open(void)
     elements_to_free = build_file_name_array(group_name_ext, &name_array);
 
     // clear screen
-    for (int count = 0; count < 50; count ++) printf("\n");
+    clear_screen();
     
+    // list group files in .grp manifest
     for (int count = 0; count < (elements_to_free - 1); count++) {
 	printf("[%d] %s\n", count + 1, name_array[count]);
     }
 
-    // list group files in .grp manifest
     max_selection = elements_to_free - 1;
-    printf("select file: ");
     
     // prompt for an store user selection
+    printf("select file: ");
     if(fgets(input, sizeof(selection), stdin) != NULL) {
 	sscanf(input, "%s", selection);
     }
@@ -302,17 +313,21 @@ int open(void)
 	return 1;
     }
 
+    // copy selected file name to 'open_file'
+    strcpy(open_file, name_array[atoi(selection) - 1]);
+
+    // copy file buffer for tokenization
     strcpy(group_file_tokenized, group_file_buffer);
 
     // initialize strtok operation on 'group_file_buffer'
-    strcpy(group_file_tokenized, group_file_buffer);
     tok = strtok(group_file_tokenized, delim);
 
+    // udpate global 'parameters' struct with new values
     while(tok != NULL) {
 	strcpy(tok_buffer, tok);
 	extract_name(tok_buffer, current_name);
 	if(strcmp(current_name, "")) {
-	    if(!strcmp(current_name, name_array[atoi(selection) - 1])) {
+	    if(!strcmp(current_name, open_file)) {
 		char search_string[MAX_VALUE_LENGTH];
 		char *location;
 		char extracted_value[MAX_VALUE_LENGTH];
@@ -323,15 +338,17 @@ int open(void)
 		    location = strstr(tok_buffer, search_string);
 		    location += sizeof(char) * strlen(search_string);
 		    sscanf(location, "%s", extracted_value);
-		    printf("'%s'\n", extracted_value);
 		    strcpy(parameters[count].value, extracted_value);
 		}
-
 	    }
 	}	    
 	tok = strtok(NULL, delim);
     }
 
+    /* update global vars 'group_name' and 'file_name' */
+    /* with selected values */
+    strcpy(group_name, open_group);
+    strcpy(file_name, open_file);
 
     for(int count = 0; count < elements_to_free; count++) {
 	free(name_array[count]);

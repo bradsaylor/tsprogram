@@ -12,12 +12,15 @@ int print_display_table(void)
     int count3 = 0;
     int pad_count = 0;
     int num_parameters = last - 1;
+    char file_name_saved[MAX_NAME_LENGTH];
 
     //  populate display table with parameter attributes
     populate_display_table();
 
     // print display header information
-    printf("File: \t%s\t\tFile is target?: %c\n", file_name, is_target_flag.file_target);
+    strcpy(file_name_saved, file_name);
+    if (!file_saved_flag) strcat(file_name_saved, "*");
+    printf("File: \t%s\t\tFile is target?: %c\n", file_name_saved, is_target_flag.file_target);
     printf("Group:\t%s\t\tRef. is target?: %c\n\n", group_name, is_target_flag.ref_target);
     printf("Auto-calc [%c]\n", auto_calc_status);
 
@@ -102,5 +105,11 @@ int populate_display_table()
 	strcpy(display_table[count1][6], parameters[count1 + 1].fault);
     }
 
+    return 0;
+}
+
+int clear_screen()
+{
+    for(int count = 0; count < lines_to_clear_scrn; count++) printf("\n");
     return 0;
 }

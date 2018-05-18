@@ -17,7 +17,9 @@
 #define table_cell_width 15	       // cell width in chars of output table
 #define num_param_attributes 7	       // number of attributes for each parameter
 				// struct
-
+#define lines_to_clear_scrn 50		// lines printed in clear_screen() fn
+#define YES 1				
+#define NO 0
 
 /******************************
   global data structures
@@ -89,5 +91,6 @@ extern char file_header_target[];
 
 // string constants to define group file header information
 extern char group_header_ID[];
+extern int file_saved_flag;
 
 #endif				// TSP_H_

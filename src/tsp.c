@@ -27,6 +27,9 @@ char file_header_date[]		= "date:";
 char file_header_target[]	= "target:";
 char group_header_ID[]		= "ID:";
 
+// global flag definitions
+int file_saved_flag = YES;
+
 
 int main(void)
 {
