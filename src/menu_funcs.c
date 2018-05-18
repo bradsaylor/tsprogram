@@ -206,19 +206,24 @@ int save(void)
 	new_group_flag = 1;
     }
 
-    // Check to see if the .grp file has a file with this name
-    // prompt to overwrite if no abort save
-    char **name_array;
-    int elements_to_free = 0;
-    int overwrite_response = 0;
-    printf("got here before\n");
-    elements_to_free = build_file_name_array(group_name_ext, &name_array);
-    printf("got here\n");
-    for(int count = 0; count < (elements_to_free - 1); count++) {
-	if(!strcmp(name_array[count], file_name)) {
-	    overwrite_response = rewind_line("File already exists overwite?", "...[y]es, [n]o");
-	    if((overwrite_response != 'y') && (overwrite_response != 'n')) rewind_line("Invalid input aborting save", "...press any key");
-	    if(overwrite_response == 'n') return 1;
+    
+    if(!new_group_flag){
+        // Check to see if the .grp file has a file with this name
+	// prompt to overwrite if no abort save
+	char **name_array;
+	int elements_to_free = 0;
+	int overwrite_response = 0;
+	printf("got here before\n");
+	elements_to_free = build_file_name_array(group_name_ext, &name_array);
+	printf("got here\n");
+	for(int count = 0; count < (elements_to_free - 1); count++) {
+	    if(!strcmp(name_array[count], file_name)) {
+		overwrite_response = rewind_line("File already exists overwite?", "...[y]es, [n]o");
+		if((overwrite_response != 'y') && (overwrite_response != 'n')) rewind_line("Invalid input aborting save", "...press any key");
+		if(overwrite_response == 'n') return 1;
+
+		
+	    }
 	}
     }
 
