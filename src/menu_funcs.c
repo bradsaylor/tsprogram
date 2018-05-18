@@ -415,6 +415,7 @@ int open(void)
 
 int reference(void)
 {
+    //similar to open() consider functionalizing
     char input[MAX_VALUE_LENGTH];
     char selection[MAX_VALUE_LENGTH];
     char open_group[MAX_NAME_LENGTH];
