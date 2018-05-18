@@ -201,7 +201,8 @@ int save(void)
 
     //  Check .grp manifest file to see if group name exists
     //  if not then add it and set new group flag
-    if(check_file_for_string(manifest_name, group_name, MAX_NAME_LENGTH * MAX_FILE_LENGTH) == 1) {
+    if(check_file_for_string(manifest_name, group_name,
+			     MAX_NAME_LENGTH * MAX_FILE_LENGTH) == 1) {
 	append_to_file(manifest_name, group_name);
 	new_group_flag = 1;
     }
@@ -213,23 +214,34 @@ int save(void)
 	char **name_array;
 	int elements_to_free = 0;
 	int overwrite_response = 0;
-	printf("got here before\n");
+	// build array of file names in .grp file store in 'name_array'
 	elements_to_free = build_file_name_array(group_name_ext, &name_array);
-	printf("got here\n");
 	for(int count = 0; count < (elements_to_free - 1); count++) {
+	    // if file name found to already exist in .grp file
 	    if(!strcmp(name_array[count], file_name)) {
 		overwrite_response = rewind_line("File already exists overwite?", "...[y]es, [n]o");
-		if((overwrite_response != 'y') && (overwrite_response != 'n')) rewind_line("Invalid input aborting save", "...press any key");
+		if((overwrite_response != 'y') && (overwrite_response != 'n')){
+		    rewind_line("Invalid input aborting save", "...press any key");
+		}
 		if(overwrite_response == 'n') return 1;
-
-		
+		else {
+		    // if response not NO remove the file from the group file
+		    remove_file_from_group(file_name, group_name_ext);
+		}
 	    }
 	}
+	// free 'name_array' elements and 'name_array' itself
+        for(int count = 0; count < elements_to_free; count++) {
+	    free(name_array[count]);
+        }
+        free(name_array);
     }
+    
 
     // if new file is group target check to see if group already has target
     if(is_target_flag.file_target == 'Y'){
 
+	// assemble string to search, and string to replace with
 	// + 3 to add space for '<SPC>' 'Y' and '\0'
 	char target_search_string[(int)strlen(file_header_target + 3)];
 	char target_replace_with[(int)strlen(file_header_target + 3)];
@@ -245,12 +257,12 @@ int save(void)
 	if(!new_group_flag) {
 	    while(check_file_for_string(group_name_ext, target_search_string,
 					MAX_FILE_LINE * MAX_FILE_LENGTH) == 0){
-		replace_file_string(
-		    group_name_ext,	     target_search_string,
-		    target_replace_with, MAX_FILE_LINE * MAX_FILE_LENGTH);
+		replace_file_string(group_name_ext, target_search_string,
+		                    target_replace_with, MAX_FILE_LINE * MAX_FILE_LENGTH);
 	    }
 	}
     }
+
 
     append_parameter_data(group_name_ext, new_group_flag);
 
@@ -403,6 +415,121 @@ int open(void)
 
 int reference(void)
 {
+    char input[MAX_VALUE_LENGTH];
+    char selection[MAX_VALUE_LENGTH];
+    char open_group[MAX_NAME_LENGTH];
+    char open_file[MAX_NAME_LENGTH];
+    int max_selection;
+    FILE *fp_manifest;
+    char group_name_ext[MAX_NAME_LENGTH + 3];
+    char **name_array;
+    char group_file_buffer[MAX_FILE_LINE * MAX_FILE_LENGTH];
+    char group_file_tokenized[MAX_FILE_LINE * MAX_FILE_LENGTH];
+    int elements_to_free = 0;
+    char *tok;
+    const char delim[2] = "$";
+    char tok_buffer[last * MAX_FILE_LINE];
+    char current_name[MAX_NAME_LENGTH];
+
+    // clear screen
+    clear_screen();
+
+    // list group files in .grp manifest
+    max_selection = list_file_numbered(manifest_name, MAX_FILE_LINE);
+    printf("select group file: ");
+
+    // prompt for an store user selection
+    if(fgets(input, sizeof(selection), stdin) != NULL) {
+	sscanf(input, "%s", selection);
+    }
+
+    // verify input is in allowable range
+    if((atoi(selection) < 1) || (atoi(selection) > max_selection)) {
+	rewind_line("Invalid input", "...press any key");
+	return 1;
+    }
+
+    // read group file name from manifest file
+    fp_manifest = fopen(manifest_name, "r");
+    for(int count = 0; count < atoi(selection); count++) {
+        fgets(open_group, MAX_FILE_LINE, fp_manifest);
+    }
+    fclose(fp_manifest);
+    // replace ending '\n' with '\0'
+    replace_char(open_group, 10, 0);
+
+    // append .grp extension and store in 'group_name_ext'
+    sprintf(group_name_ext, "%s%s", open_group, FILE_EXTENSION);
+
+    return_file_as_string(group_name_ext, group_file_buffer, sizeof(group_file_buffer));
+    elements_to_free = build_file_name_array(group_name_ext, &name_array);
+
+    // clear screen
+    clear_screen();
+    
+    // list group files in .grp manifest
+    for (int count = 0; count < (elements_to_free - 1); count++) {
+	printf("[%d] %s\n", count + 1, name_array[count]);
+    }
+
+    max_selection = elements_to_free - 1;
+    
+    // prompt for an store user selection
+    printf("select file: ");
+    if(fgets(input, sizeof(selection), stdin) != NULL) {
+	sscanf(input, "%s", selection);
+    }
+
+    // verify input is in allowable range
+    if((atoi(selection) < 1) || (atoi(selection) > (elements_to_free - 1))) {
+	rewind_line("Invalid input", "...press any key");
+	return 1;
+    }
+
+    // copy selected file name to 'open_file'
+    strcpy(open_file, name_array[atoi(selection) - 1]);
+
+    // copy file buffer for tokenization
+    strcpy(group_file_tokenized, group_file_buffer);
+
+    // initialize strtok operation on 'group_file_buffer'
+    tok = strtok(group_file_tokenized, delim);
+
+    // udpate global 'parameters' struct with new values
+    while(tok != NULL) {
+	strcpy(tok_buffer, tok);
+	extract_name(tok_buffer, current_name);
+	if(strcmp(current_name, "")) {
+	    if(!strcmp(current_name, open_file)) {
+		char search_string[MAX_VALUE_LENGTH];
+		char *location;
+		char extracted_value[MAX_VALUE_LENGTH];
+
+		for(int count = 2; count < last; count++) {
+		    strcpy(search_string, parameters[count].name);
+		    strcat(search_string, ":\t");
+		    location = strstr(tok_buffer, search_string);
+		    location += sizeof(char) * strlen(search_string);
+		    sscanf(location, "%s", extracted_value);
+		    strcpy(parameters[count].ref_value, extracted_value);
+		}
+	    }
+	}	    
+	tok = strtok(NULL, delim);
+    }
+
+    /* update global vars 'group_name' and 'file_name' */
+    /* with selected values */
+    strcpy(ref_group_name, open_group);
+    strcpy(ref_file_name, open_file);
+
+    // free 'name_array' elements and 'name_array' itself
+    for(int count = 0; count < elements_to_free; count++) {
+	free(name_array[count]);
+    }
+    free(name_array);
+
+    return 0;
 
     return 0;
 }

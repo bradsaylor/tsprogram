@@ -201,3 +201,40 @@ int sort_names(char **name_array, int array_size)
 
     return 0;
 }
+
+int remove_file_from_group(char *file_to_remove, char *group)
+{
+   char file_tokenized[MAX_FILE_LINE * MAX_FILE_LENGTH];
+    char file_buffer[MAX_FILE_LINE * MAX_FILE_LENGTH];    
+    const char delim[2] = "$";
+    char *tok;
+    char tok_buffer[last * MAX_FILE_LINE];    
+    char current_name[MAX_NAME_LENGTH];
+    int found_file_flag = 1;
+
+    return_file_as_string(group, file_buffer, sizeof(file_buffer));
+    strcpy(file_tokenized, file_buffer);
+    
+    // initialize strtok operation on 'file_buffer'
+    tok = strtok(file_tokenized, delim);
+    
+    // while more tokens exist in 'file_buffer'
+    while (tok != NULL) {
+	// copy tokenized portion to 'tok_buffer'
+	strcpy(tok_buffer, tok);
+	// extract name from tok_buffer store in 'current_name'
+	extract_name(tok_buffer, current_name);
+	
+	if (!strcmp(current_name, file_to_remove)) {
+	    // delete file from group file
+	    replace_file_string(group, tok_buffer, "", last * MAX_FILE_LINE);
+	    found_file_flag = 0;
+	}
+	
+	// try to grab next token from 'file_buffer'
+	tok = strtok(NULL, delim);
+    }
+
+    return found_file_flag;    
+
+}

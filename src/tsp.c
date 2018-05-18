@@ -16,7 +16,9 @@ struct parameter parameters[last + 1];
 struct is_target is_target_flag;
 
 char file_name[MAX_NAME_LENGTH];
+char ref_file_name[MAX_NAME_LENGTH];
 char group_name[MAX_NAME_LENGTH];
+char ref_group_name[MAX_NAME_LENGTH];
 char manifest_name[] = ".grp_manifest";
 char auto_calc_status;
 char time_stamp[50];

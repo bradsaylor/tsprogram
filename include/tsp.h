@@ -73,7 +73,9 @@ extern struct parameter parameters[];	// array of paramters defined in
 extern struct is_target is_target_flag;	// target flag for file and ref
 					
 extern char file_name[];	// data file name defined in tsp.c
+extern char ref_file_name[];	// reference data file name defined in tsp.c
 extern char group_name[];	// group file name defined in tsp.c
+extern char ref_group_name[];	// reference group file name defined in tsp.c
 extern char manifest_name[];	// .grp file manifest file name
 extern char auto_calc_status;
 extern char time_stamp[];

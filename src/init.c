@@ -125,7 +125,9 @@ int tsp_init(void)
     strcpy(parameters[sd].fault, empty_label);
 
     strcpy(file_name, empty_label);
+    strcpy(ref_file_name, empty_label);
     strcpy(group_name, empty_label);
+    strcpy(ref_group_name, empty_label);
     auto_calc_status = 'N';
 
     //  check to see if .grp manifest file has been created

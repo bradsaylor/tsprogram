@@ -20,8 +20,9 @@ int print_display_table(void)
     // print display header information
     strcpy(file_name_saved, file_name);
     if (!file_saved_flag) strcat(file_name_saved, "*");
-    printf("File: \t%s\t\tFile is target?: %c\n", file_name_saved, is_target_flag.file_target);
-    printf("Group:\t%s\t\tRef. is target?: %c\n\n", group_name, is_target_flag.ref_target);
+    printf("File: \t%s\t\tFile is target?: %c\t\t\tRef:        %s\t\tRef is target?: %c\n",
+	   file_name_saved, is_target_flag.file_target, ref_file_name, is_target_flag.ref_target);
+    printf("Group:\t%s\t\t\t\t\t\t\tRef. Group: %s\n\n", group_name, ref_group_name);
     printf("Auto-calc [%c]\n", auto_calc_status);
 
     //  print out top table horizontal delimiter
