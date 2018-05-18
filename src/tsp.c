@@ -53,6 +53,8 @@ int main(void)
 	if (fgets(input, sizeof(selection), stdin) != NULL) {
 	    sscanf(input, "%s", selection);
 	}
+
+        // set quit input
 	if (!strcmp(selection, "q"))
 	    return 0;
 
