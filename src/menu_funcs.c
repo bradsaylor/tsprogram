@@ -206,6 +206,22 @@ int save(void)
 	new_group_flag = 1;
     }
 
+    // Check to see if the .grp file has a file with this name
+    // prompt to overwrite if no abort save
+    char **name_array;
+    int elements_to_free = 0;
+    int overwrite_response = 0;
+    printf("got here before\n");
+    elements_to_free = build_file_name_array(group_name_ext, &name_array);
+    printf("got here\n");
+    for(int count = 0; count < (elements_to_free - 1); count++) {
+	if(!strcmp(name_array[count], file_name)) {
+	    overwrite_response = rewind_line("File already exists overwite?", "...[y]es, [n]o");
+	    if((overwrite_response != 'y') && (overwrite_response != 'n')) rewind_line("Invalid input aborting save", "...press any key");
+	    if(overwrite_response == 'n') return 1;
+	}
+    }
+
     // if new file is group target check to see if group already has target
     if(is_target_flag.file_target == 'Y'){
 
@@ -257,7 +273,28 @@ int open(void)
     const char delim[2] = "$";
     char tok_buffer[last * MAX_FILE_LINE];
     char current_name[MAX_NAME_LENGTH];
-    
+
+    // if there are no group files output error and return
+    if(count_file_lines(manifest_name, MAX_FILE_LINE) < 1) {
+
+	rewind_line("No .grp files to open", "...press any key");
+	return 1;
+    }    
+
+    if(!file_saved_flag) {
+	char save_response;
+	
+	save_response = rewind_line("Save current file?", "...[y]es, [n]o");
+	if((save_response != 'y') && (save_response != 'n')) {
+	    rewind_line("Invalid input, aborting open", "...press any key");
+	} else {
+	    if(save_response == 'y') save();
+	}
+    }
+
+    // if current file not saved prompt to save
+    if(!file_saved_flag)
+   
     // clear screen
     clear_screen();
 
@@ -272,7 +309,7 @@ int open(void)
 
     // verify input is in allowable range
     if((atoi(selection) < 1) || (atoi(selection) > max_selection)) {
-	rewind_line("Invalid input");
+	rewind_line("Invalid input", "...press any key");
 	return 1;
     }
 
@@ -309,7 +346,7 @@ int open(void)
 
     // verify input is in allowable range
     if((atoi(selection) < 1) || (atoi(selection) > (elements_to_free - 1))) {
-	rewind_line("Invalid input");
+	rewind_line("Invalid input", "...press any key");
 	return 1;
     }
 
@@ -350,6 +387,7 @@ int open(void)
     strcpy(group_name, open_group);
     strcpy(file_name, open_file);
 
+    // free 'name_array' elements and 'name_array' itself
     for(int count = 0; count < elements_to_free; count++) {
 	free(name_array[count]);
     }

@@ -148,14 +148,15 @@ int getch(void);
   USES:  <termios.h> <unistd.h> <stdio.h>
 __________________________________________________________________________ */
 
-int rewind_line(char *print_string);
+int rewind_line(char *print_string, char *exit_string);
 /*
   ***** int rewind_line(char *print_string) *****
   Prints srting 'print_string' then prompts and waits
   for any input and rewinds to the beginning of the line 
   erasing prompt and 'print_string'
 
-REQUIRES: print_string -> string to print
+REQUIRES: print_string -> message string to print
+          exit_string  -> exit string to print
 
 RETURNS:  0
 __________________________________________________________________________ */

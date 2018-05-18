@@ -56,7 +56,7 @@ int main(void)
 
 	// validate input
 	if (validate_input(selection))
-	    printf("\n%s is bad input!\n", selection);
+	    rewind_line("Not a menu function", "...press any key");
     }
     return 0;
 

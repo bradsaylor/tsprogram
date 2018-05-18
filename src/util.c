@@ -301,22 +301,21 @@ int getch(void)
     return ch;
 }
 
-int rewind_line(char *print_string)
+int rewind_line(char *print_string, char *exit_string)
 {
-     char x;
-     char exit_string[]  = " ...any key";
+     char input;
 
      printf("%s", print_string);
      printf("%s", exit_string);
-     x = getch();
+     input = getch();
 
-     for(int x = 0; x < ((int)strlen(print_string) + (int)strlen(exit_string)); x++) {
+     for(int count = 0; count < ((int)strlen(print_string) + (int)strlen(exit_string)); count++) {
 	  putchar('\b');
 	  putchar(' ');
 	  putchar('\b');
      }
 
-     return 0;
+     return input;
 }
 
 int bash_resize(int x, int y)
