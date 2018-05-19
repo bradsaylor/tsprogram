@@ -8,6 +8,7 @@
 #include "../include/util.h"
 #include "../include/tsp_file_func_utils.h"
 #include "../include/tsp_display.h"
+#include "../include/init.h"
 
 int validate_input(char *input)
 {
@@ -75,15 +76,17 @@ int validate_input(char *input)
 	target();
 	return 0;
     } else if (!strcmp(input, "q")) {
-	quit();
-	return 0;
+	return 1;
     } else if (!strcmp(input, "a")) {
 	calc();
 	return 0;
-    } else
-	return 1;
-
-
+    } else if (!strcmp(input, "z")) {
+	reset();
+	return 0;
+    } else {
+        rewind_line("Not a menu function", "...press any key");
+	return 0;
+    }
 }
 
 int menu(void)
@@ -386,6 +389,10 @@ int open(void)
 		char *location;
 		char extracted_value[MAX_VALUE_LENGTH];
 
+		// Look for target indication and set flag accordingly
+		if(strstr(tok_buffer, "target:\tY")) is_target_flag.file_target = 'Y';
+		else is_target_flag.file_target = 'N';
+
 		for(int count = 2; count < last; count++) {
 		    strcpy(search_string, parameters[count].name);
 		    strcat(search_string, ":\t");
@@ -555,12 +562,6 @@ int target(void)
     return 0;
 }
 
-int quit(void)
-{
-
-    return 0;
-}
-
 int calc(void)
 {
     if (auto_calc_status == 'Y') auto_calc_status = 'N';
@@ -569,4 +570,9 @@ int calc(void)
     return 0;
 }
 
-
+int reset (void)
+{
+    tsp_init();
+    
+    return 0;
+}

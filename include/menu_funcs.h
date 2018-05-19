@@ -16,6 +16,6 @@ int variance(void);
 int target(void);
 int quit(void);
 int calc(void);
-
+int reset(void);
 
 #endif				//MENU_FUNCS_H_

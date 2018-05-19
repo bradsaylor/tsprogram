@@ -38,11 +38,12 @@ int main(void)
     // local variables
     char input[MAX_VALUE_LENGTH];
     char selection[MAX_VALUE_LENGTH];
+    int quit_flag = 0;
 
     // run initialization function
     tsp_init();
 
-    while (1) {
+    while (!quit_flag) {
 	// print initial screen
 	print_display_table();
 
@@ -59,8 +60,8 @@ int main(void)
 	    return 0;
 
 	// validate input
-	if (validate_input(selection))
-	    rewind_line("Not a menu function", "...press any key");
+	if ((quit_flag = validate_input(selection))) return 0;
+
     }
     return 0;
 
