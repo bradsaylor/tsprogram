@@ -238,3 +238,120 @@ int remove_file_from_group(char *file_to_remove, char *group)
     return found_file_flag;    
 
 }
+
+int select_group_file(char *group_file_name)
+{
+    int max_selection = 0;
+    char input[MAX_VALUE_LENGTH];
+    char selection[MAX_VALUE_LENGTH];
+    FILE *fp_manifest;    
+    
+    // list group files in .grp manifest
+    max_selection = list_file_numbered(manifest_name, MAX_FILE_LINE);
+    printf("select group file: ");
+
+    // prompt for and store user selection
+    if(fgets(input, sizeof(selection), stdin) != NULL) {
+	sscanf(input, "%s", selection);
+    }
+
+    // verify input is in allowable range
+    if((atoi(selection) < 1) || (atoi(selection) > max_selection)) {
+	rewind_line("Invalid input", "...press any key");
+	return 1;
+    }
+
+    // read group file name from manifest file
+    fp_manifest = fopen(manifest_name, "r");
+    for(int count = 0; count < atoi(selection); count++) {
+        fgets(group_file_name, MAX_FILE_LINE, fp_manifest);
+    }
+    fclose(fp_manifest);
+    
+    // replace ending '\n' with '\0'
+    replace_char(group_file_name, 10, 0);
+
+    
+    return 0;
+}
+
+int select_file(char *name, char ***name_array, int max_selection)
+{
+    char input[MAX_VALUE_LENGTH];
+    char selection[MAX_VALUE_LENGTH];
+
+    // list group files in .grp file
+    for (int count = 0; count < max_selection; count++) {
+	printf("[%d] %s\n", count + 1, (*name_array)[count]);
+    }
+
+    // prompt for an store user selection
+    printf("select file: ");
+    if(fgets(input, sizeof(selection), stdin) != NULL) {
+	sscanf(input, "%s", selection);
+    }
+
+    // verify input is in allowable range
+    if((atoi(selection) < 1) || (atoi(selection) > max_selection)) {
+	rewind_line("Invalid input", "...press any key");
+	return 1;
+    }
+
+    // copy selected file name to 'open_file'
+    strcpy(name, (*name_array)[atoi(selection) - 1]);
+
+
+    return 0;
+}
+
+int get_params_from_filestring(char *group_file_buffer, char *open_file, char type)
+{
+    // types: (file) -> f, (reference) -> r
+    char group_file_tokenized[MAX_FILE_LINE * MAX_FILE_LENGTH];
+    char *tok;
+    const char delim[2] = "$";
+    char current_name[MAX_NAME_LENGTH];
+    char tok_buffer[last * MAX_FILE_LINE];    
+    
+    // copy file buffer for tokenization
+    strcpy(group_file_tokenized, group_file_buffer);
+
+    // initialize strtok operation on 'group_file_buffer'
+    tok = strtok(group_file_tokenized, delim);
+
+    // udpate global 'parameters' struct with new values
+    while(tok != NULL) {
+	strcpy(tok_buffer, tok);
+	extract_name(tok_buffer, current_name);
+	if(strcmp(current_name, "")) {
+	    if(!strcmp(current_name, open_file)) {
+		char search_string[MAX_VALUE_LENGTH];
+		char *location;
+		char extracted_value[MAX_VALUE_LENGTH];
+
+		for(int count = 2; count < last; count++) {
+		    strcpy(search_string, parameters[count].name);
+		    strcat(search_string, ":\t");
+		    location = strstr(tok_buffer, search_string);
+		    location += sizeof(char) * strlen(search_string);
+		    sscanf(location, "%s", extracted_value);
+		    switch(type) {
+		    case 'f':
+			strcpy(parameters[count].value, extracted_value);
+			break;
+		    case 'r':
+			strcpy(parameters[count].ref_value, extracted_value);
+			break;
+		    default:
+			break;
+		    }
+
+		}
+	    }
+	}	    
+	tok = strtok(NULL, delim);
+    }
+
+
+    return 0;
+}

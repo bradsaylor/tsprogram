@@ -21,6 +21,10 @@ $(ODIR)/%.o: %.c $(DEPS)
 
 tsp: $(OBJ)
 	$(CC) -o $@ $^ $(CFLAGS) $(LIBS)
+	cd ~/programming/tsprogram/src
+	ctags -e -R *.c
+	cd ~/programming/tsprogram/include
+	ctags -e -R *.h
 
 .PHONY: clean
 

@@ -278,21 +278,13 @@ int save(void)
 
 int open(void)
 {
-    char input[MAX_VALUE_LENGTH];
-    char selection[MAX_VALUE_LENGTH];
     char open_group[MAX_NAME_LENGTH];
     char open_file[MAX_NAME_LENGTH];
     int max_selection;
-    FILE *fp_manifest;
     char group_name_ext[MAX_NAME_LENGTH + 3];
     char **name_array;
     char group_file_buffer[MAX_FILE_LINE * MAX_FILE_LENGTH];
-    char group_file_tokenized[MAX_FILE_LINE * MAX_FILE_LENGTH];
     int elements_to_free = 0;
-    char *tok;
-    const char delim[2] = "$";
-    char tok_buffer[last * MAX_FILE_LINE];
-    char current_name[MAX_NAME_LENGTH];
 
     // if there are no group files output error and return
     if(count_file_lines(manifest_name, MAX_FILE_LINE) < 1) {
@@ -301,6 +293,7 @@ int open(void)
 	return 1;
     }    
 
+    // prompt to save current file if unsaved
     if(!file_saved_flag) {
 	char save_response;
 	
@@ -312,99 +305,27 @@ int open(void)
 	}
     }
 
-    // if current file not saved prompt to save
-    if(!file_saved_flag)
-   
     // clear screen
     clear_screen();
 
-    // list group files in .grp manifest
-    max_selection = list_file_numbered(manifest_name, MAX_FILE_LINE);
-    printf("select group file: ");
-
-    // prompt for an store user selection
-    if(fgets(input, sizeof(selection), stdin) != NULL) {
-	sscanf(input, "%s", selection);
-    }
-
-    // verify input is in allowable range
-    if((atoi(selection) < 1) || (atoi(selection) > max_selection)) {
-	rewind_line("Invalid input", "...press any key");
-	return 1;
-    }
-
-    // read group file name from manifest file
-    fp_manifest = fopen(manifest_name, "r");
-    for(int count = 0; count < atoi(selection); count++) {
-        fgets(open_group, MAX_FILE_LINE, fp_manifest);
-    }
-    fclose(fp_manifest);
-    // replace ending '\n' with '\0'
-    replace_char(open_group, 10, 0);
+    select_group_file(open_group);
 
     // append .grp extension and store in 'group_name_ext'
     sprintf(group_name_ext, "%s%s", open_group, FILE_EXTENSION);
 
+    // create 'group_file_buffer' to store group file as string
     return_file_as_string(group_name_ext, group_file_buffer, sizeof(group_file_buffer));
+    
+    // build 'name_array' to hold all names in chosen group file
     elements_to_free = build_file_name_array(group_name_ext, &name_array);
+    max_selection = elements_to_free - 1;   
 
     // clear screen
     clear_screen();
-    
-    // list group files in .grp manifest
-    for (int count = 0; count < (elements_to_free - 1); count++) {
-	printf("[%d] %s\n", count + 1, name_array[count]);
-    }
 
-    max_selection = elements_to_free - 1;
-    
-    // prompt for an store user selection
-    printf("select file: ");
-    if(fgets(input, sizeof(selection), stdin) != NULL) {
-	sscanf(input, "%s", selection);
-    }
+    select_file(open_file, &name_array, max_selection);
 
-    // verify input is in allowable range
-    if((atoi(selection) < 1) || (atoi(selection) > (elements_to_free - 1))) {
-	rewind_line("Invalid input", "...press any key");
-	return 1;
-    }
-
-    // copy selected file name to 'open_file'
-    strcpy(open_file, name_array[atoi(selection) - 1]);
-
-    // copy file buffer for tokenization
-    strcpy(group_file_tokenized, group_file_buffer);
-
-    // initialize strtok operation on 'group_file_buffer'
-    tok = strtok(group_file_tokenized, delim);
-
-    // udpate global 'parameters' struct with new values
-    while(tok != NULL) {
-	strcpy(tok_buffer, tok);
-	extract_name(tok_buffer, current_name);
-	if(strcmp(current_name, "")) {
-	    if(!strcmp(current_name, open_file)) {
-		char search_string[MAX_VALUE_LENGTH];
-		char *location;
-		char extracted_value[MAX_VALUE_LENGTH];
-
-		// Look for target indication and set flag accordingly
-		if(strstr(tok_buffer, "target:\tY")) is_target_flag.file_target = 'Y';
-		else is_target_flag.file_target = 'N';
-
-		for(int count = 2; count < last; count++) {
-		    strcpy(search_string, parameters[count].name);
-		    strcat(search_string, ":\t");
-		    location = strstr(tok_buffer, search_string);
-		    location += sizeof(char) * strlen(search_string);
-		    sscanf(location, "%s", extracted_value);
-		    strcpy(parameters[count].value, extracted_value);
-		}
-	    }
-	}	    
-	tok = strtok(NULL, delim);
-    }
+    get_params_from_filestring(group_file_buffer, open_file, 'f');
 
     /* update global vars 'group_name' and 'file_name' */
     /* with selected values */
@@ -422,49 +343,17 @@ int open(void)
 
 int reference(void)
 {
-    //similar to open() consider functionalizing
-    char input[MAX_VALUE_LENGTH];
-    char selection[MAX_VALUE_LENGTH];
     char open_group[MAX_NAME_LENGTH];
     char open_file[MAX_NAME_LENGTH];
-    int max_selection;
-    FILE *fp_manifest;
     char group_name_ext[MAX_NAME_LENGTH + 3];
     char **name_array;
     char group_file_buffer[MAX_FILE_LINE * MAX_FILE_LENGTH];
-    char group_file_tokenized[MAX_FILE_LINE * MAX_FILE_LENGTH];
     int elements_to_free = 0;
-    char *tok;
-    const char delim[2] = "$";
-    char tok_buffer[last * MAX_FILE_LINE];
-    char current_name[MAX_NAME_LENGTH];
 
     // clear screen
     clear_screen();
 
-    // list group files in .grp manifest
-    max_selection = list_file_numbered(manifest_name, MAX_FILE_LINE);
-    printf("select group file: ");
-
-    // prompt for an store user selection
-    if(fgets(input, sizeof(selection), stdin) != NULL) {
-	sscanf(input, "%s", selection);
-    }
-
-    // verify input is in allowable range
-    if((atoi(selection) < 1) || (atoi(selection) > max_selection)) {
-	rewind_line("Invalid input", "...press any key");
-	return 1;
-    }
-
-    // read group file name from manifest file
-    fp_manifest = fopen(manifest_name, "r");
-    for(int count = 0; count < atoi(selection); count++) {
-        fgets(open_group, MAX_FILE_LINE, fp_manifest);
-    }
-    fclose(fp_manifest);
-    // replace ending '\n' with '\0'
-    replace_char(open_group, 10, 0);
+    select_group_file(open_group);
 
     // append .grp extension and store in 'group_name_ext'
     sprintf(group_name_ext, "%s%s", open_group, FILE_EXTENSION);
@@ -475,56 +364,9 @@ int reference(void)
     // clear screen
     clear_screen();
     
-    // list group files in .grp manifest
-    for (int count = 0; count < (elements_to_free - 1); count++) {
-	printf("[%d] %s\n", count + 1, name_array[count]);
-    }
+    select_file(open_file, &name_array, elements_to_free - 1);
 
-    max_selection = elements_to_free - 1;
-    
-    // prompt for an store user selection
-    printf("select file: ");
-    if(fgets(input, sizeof(selection), stdin) != NULL) {
-	sscanf(input, "%s", selection);
-    }
-
-    // verify input is in allowable range
-    if((atoi(selection) < 1) || (atoi(selection) > (elements_to_free - 1))) {
-	rewind_line("Invalid input", "...press any key");
-	return 1;
-    }
-
-    // copy selected file name to 'open_file'
-    strcpy(open_file, name_array[atoi(selection) - 1]);
-
-    // copy file buffer for tokenization
-    strcpy(group_file_tokenized, group_file_buffer);
-
-    // initialize strtok operation on 'group_file_buffer'
-    tok = strtok(group_file_tokenized, delim);
-
-    // udpate global 'parameters' struct with new values
-    while(tok != NULL) {
-	strcpy(tok_buffer, tok);
-	extract_name(tok_buffer, current_name);
-	if(strcmp(current_name, "")) {
-	    if(!strcmp(current_name, open_file)) {
-		char search_string[MAX_VALUE_LENGTH];
-		char *location;
-		char extracted_value[MAX_VALUE_LENGTH];
-
-		for(int count = 2; count < last; count++) {
-		    strcpy(search_string, parameters[count].name);
-		    strcat(search_string, ":\t");
-		    location = strstr(tok_buffer, search_string);
-		    location += sizeof(char) * strlen(search_string);
-		    sscanf(location, "%s", extracted_value);
-		    strcpy(parameters[count].ref_value, extracted_value);
-		}
-	    }
-	}	    
-	tok = strtok(NULL, delim);
-    }
+    get_params_from_filestring(group_file_buffer, open_file, 'r');
 
     /* update global vars 'group_name' and 'file_name' */
     /* with selected values */
