@@ -271,19 +271,17 @@ int select_group_file(char *group_file_name)
     // replace ending '\n' with '\0'
     replace_char(group_file_name, 10, 0);
 
-    strcpy(ref_group_name, group_file_name);
-
-    
     return 0;
 }
 
-int select_file(char *name, char ***name_array, int max_selection, char type)
+int select_file(char *name, char *open_group, char ***name_array, int max_selection, char type)
 {
     // types (open) -> o, reference -> r
 
     char input[MAX_VALUE_LENGTH];
     char selection[MAX_VALUE_LENGTH];
     int count = 0;
+    int avg_select_number = -1;
 
     // list group files in .grp file
     for (count = 0; count < max_selection; count++) {
@@ -299,23 +297,27 @@ int select_file(char *name, char ***name_array, int max_selection, char type)
     }
 
     // verify input is in allowable range
-    if(type == 'r') max_selection++;
+    if(type == 'r') {
+	max_selection++;
+	avg_select_number = max_selection;
+    }
+    
     if((atoi(selection) < 1) || (atoi(selection) > max_selection)) {
 	rewind_line("Invalid input", "...press any key");
 	return 1;
     }
 
-    // copy selected file name to 'open_file'
-    if(type == 'o') strcpy(name, (*name_array)[atoi(selection) - 1]);
-    if(type == 'r') {
+    // if group avg is chosen set type to 'a'
+    if(atoi(selection) == avg_select_number) type = 'a';
+    
+    // copy selected group or file to appropriate name variable
+    if((type == 'o') || (type == 'r')) strcpy(name, (*name_array)[atoi(selection) - 1]);
+    if(type == 'a') {
 	char avg_group_file_name[MAX_NAME_LENGTH];
-	strcpy(avg_group_file_name, ref_group_name);
+	strcpy(avg_group_file_name, open_group);
 	strcat(avg_group_file_name, ".grp-AVG");
-	printf("name: %s\n", avg_group_file_name);
 	strcpy(name, avg_group_file_name);
-	type = 'a';
     }
-
 
     return type;
 }
@@ -333,6 +335,12 @@ int get_params_from_filestring(char *group_file_buffer, char *open_file, char ty
     
     // copy file buffer for tokenization
     strcpy(group_file_tokenized, group_file_buffer);
+
+    // if taking avg and 'file_buffer contains 'empty_label' notify and abort
+    if((type == 'a')&& (strstr(group_file_buffer, empty_label))) {
+	rewind_line("group file contains incomplete data, aborting", "... any key to continue");
+	return 1;
+    }
 
     // initialize strtok operation on 'group_file_buffer'
     tok = strtok(group_file_tokenized, delim);
@@ -367,8 +375,9 @@ int get_params_from_filestring(char *group_file_buffer, char *open_file, char ty
 		    break;
 		case 'a':
 		    // if current tokenized chunk is not a group target
-		    if(!strstr(tok_buffer, "target:\tY"))
-		    param_avg_array[count - 2] += atof(extracted_value);
+		    if(!strstr(tok_buffer, "target:\tY")) {
+		        param_avg_array[count - 2] += atof(extracted_value);
+		    }
 		    break;
 		default:
 		    break;
@@ -387,5 +396,5 @@ int get_params_from_filestring(char *group_file_buffer, char *open_file, char ty
 	}
     }
 
-    return type;
+    return 0;
 }

@@ -323,7 +323,7 @@ int open(void)
     // clear screen
     clear_screen();
 
-    select_file(open_file, &name_array, max_selection, 'o');
+    select_file(open_file, open_group, &name_array, max_selection, 'o');
 
     get_params_from_filestring(group_file_buffer, open_file, 'f');
 
@@ -350,6 +350,7 @@ int reference(void)
     char group_file_buffer[MAX_FILE_LINE * MAX_FILE_LENGTH];
     int elements_to_free = 0;
     char file_type = 0;
+    int params_obtained_flag = 0;
 
     // clear screen
     clear_screen();
@@ -365,22 +366,22 @@ int reference(void)
     // clear screen
     clear_screen();
     
-    file_type = select_file(open_file, &name_array, elements_to_free - 1, 'r');
+    file_type = select_file(open_file, open_group, &name_array, elements_to_free - 1, 'r');
 
-    get_params_from_filestring(group_file_buffer, open_file, file_type);
+    params_obtained_flag = get_params_from_filestring(group_file_buffer, open_file, file_type);
 
     /* update global vars 'group_name' and 'file_name' */
     /* with selected values */
-    strcpy(ref_group_name, open_group);
-    strcpy(ref_file_name, open_file);
+    if(!params_obtained_flag) {
+        strcpy(ref_group_name, open_group);
+        strcpy(ref_file_name, open_file);
+    }
 
     // free 'name_array' elements and 'name_array' itself
     for(int count = 0; count < elements_to_free; count++) {
 	free(name_array[count]);
     }
     free(name_array);
-
-    return 0;
 
     return 0;
 }
