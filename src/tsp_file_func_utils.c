@@ -398,3 +398,22 @@ int get_params_from_filestring(char *group_file_buffer, char *open_file, char ty
 
     return 0;
 }
+
+int compile_variance()
+{
+  float variance_percent = 0;
+  char variance_string[MAX_VALUE_LENGTH];
+  
+  
+  for(int count = 2; count < last; count++) {
+    // if parameter set has values for 'value' and 'ref_value'
+    if((strcmp(parameters[count].value, empty_label)) && (strcmp(parameters[count].ref_value, empty_label))) {
+      variance_percent =
+	100 * (atof(parameters[count].value) - atof(parameters[count].ref_value))/(atof(parameters[count].ref_value));
+      sprintf(variance_string, "%f", variance_percent);
+      strcpy(parameters[count].variance, variance_string);
+    } else strcpy(parameters[count].variance, empty_label);
+  }
+
+  return 0;
+}

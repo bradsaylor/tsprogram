@@ -8,6 +8,7 @@
 #include "../include/util.h"
 #include "../include/init.h"
 #include "../include/menu_funcs.h"
+#include "../include/tsp_file_func_utils.h"
 #include "../include/debug.h"
 #include "../include/tsp_display.h"
 
@@ -44,6 +45,10 @@ int main(void)
     tsp_init();
 
     while (!quit_flag) {
+        // compile variance data
+        compile_variance();
+        
+      
 	// print initial screen
 	print_display_table();
 
