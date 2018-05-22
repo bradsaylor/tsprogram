@@ -271,19 +271,26 @@ int select_group_file(char *group_file_name)
     // replace ending '\n' with '\0'
     replace_char(group_file_name, 10, 0);
 
+    strcpy(ref_group_name, group_file_name);
+
     
     return 0;
 }
 
-int select_file(char *name, char ***name_array, int max_selection)
+int select_file(char *name, char ***name_array, int max_selection, char type)
 {
+    // types (open) -> o, reference -> r
+
     char input[MAX_VALUE_LENGTH];
     char selection[MAX_VALUE_LENGTH];
+    int count = 0;
 
     // list group files in .grp file
-    for (int count = 0; count < max_selection; count++) {
+    for (count = 0; count < max_selection; count++) {
 	printf("[%d] %s\n", count + 1, (*name_array)[count]);
     }
+
+    if(type == 'r') printf("[%d] %s\n", count + 1, "Group AVG");
 
     // prompt for an store user selection
     printf("select file: ");
@@ -292,26 +299,37 @@ int select_file(char *name, char ***name_array, int max_selection)
     }
 
     // verify input is in allowable range
+    if(type == 'r') max_selection++;
     if((atoi(selection) < 1) || (atoi(selection) > max_selection)) {
 	rewind_line("Invalid input", "...press any key");
 	return 1;
     }
 
     // copy selected file name to 'open_file'
-    strcpy(name, (*name_array)[atoi(selection) - 1]);
+    if(type == 'o') strcpy(name, (*name_array)[atoi(selection) - 1]);
+    if(type == 'r') {
+	char avg_group_file_name[MAX_NAME_LENGTH];
+	strcpy(avg_group_file_name, ref_group_name);
+	strcat(avg_group_file_name, ".grp-AVG");
+	printf("name: %s\n", avg_group_file_name);
+	strcpy(name, avg_group_file_name);
+	type = 'a';
+    }
 
 
-    return 0;
+    return type;
 }
 
 int get_params_from_filestring(char *group_file_buffer, char *open_file, char type)
 {
-    // types: (file) -> f, (reference) -> r
+    // types: (file) -> f, (reference) -> r, (average) -> a
     char group_file_tokenized[MAX_FILE_LINE * MAX_FILE_LENGTH];
     char *tok;
     const char delim[2] = "$";
     char current_name[MAX_NAME_LENGTH];
-    char tok_buffer[last * MAX_FILE_LINE];    
+    char tok_buffer[last * MAX_FILE_LINE];
+    float param_avg_array[last - 1];
+    int avg_count = 0;
     
     // copy file buffer for tokenization
     strcpy(group_file_tokenized, group_file_buffer);
@@ -323,35 +341,51 @@ int get_params_from_filestring(char *group_file_buffer, char *open_file, char ty
     while(tok != NULL) {
 	strcpy(tok_buffer, tok);
 	extract_name(tok_buffer, current_name);
+	// if current tokenized chunk has a name
 	if(strcmp(current_name, "")) {
-	    if(!strcmp(current_name, open_file)) {
-		char search_string[MAX_VALUE_LENGTH];
-		char *location;
-		char extracted_value[MAX_VALUE_LENGTH];
+	    avg_count++;
+	    char search_string[MAX_VALUE_LENGTH];
+	    char *location;
+	    char extracted_value[MAX_VALUE_LENGTH];
 
-		for(int count = 2; count < last; count++) {
-		    strcpy(search_string, parameters[count].name);
-		    strcat(search_string, ":\t");
-		    location = strstr(tok_buffer, search_string);
-		    location += sizeof(char) * strlen(search_string);
-		    sscanf(location, "%s", extracted_value);
-		    switch(type) {
-		    case 'f':
+	    for(int count = 2; count < last; count++) {
+		strcpy(search_string, parameters[count].name);
+		strcat(search_string, ":\t");
+		location = strstr(tok_buffer, search_string);
+		location += sizeof(char) * strlen(search_string);
+		sscanf(location, "%s", extracted_value);
+		switch(type) {
+		case 'f':
+		    if(!strcmp(current_name, open_file)) {
 			strcpy(parameters[count].value, extracted_value);
-			break;
-		    case 'r':
-			strcpy(parameters[count].ref_value, extracted_value);
-			break;
-		    default:
-			break;
 		    }
-
+		    break;
+		case 'r':
+		    if(!strcmp(current_name, open_file)) {			
+			strcpy(parameters[count].ref_value, extracted_value);
+		    }
+		    break;
+		case 'a':
+		    // if current tokenized chunk is not a group target
+		    if(!strstr(tok_buffer, "target:\tY"))
+		    param_avg_array[count - 2] += atof(extracted_value);
+		    break;
+		default:
+		    break;
 		}
 	    }
 	}	    
 	tok = strtok(NULL, delim);
     }
 
+    if(type == 'a') {
+	char avg_value[MAX_VALUE_LENGTH];
 
-    return 0;
+	for(int count = 2; count < last; count++) {
+	    sprintf(avg_value, "%f", param_avg_array[count - 2]/((float)(avg_count)));
+	    strcpy(parameters[count].ref_value, avg_value);
+	}
+    }
+
+    return type;
 }

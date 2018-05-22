@@ -323,7 +323,7 @@ int open(void)
     // clear screen
     clear_screen();
 
-    select_file(open_file, &name_array, max_selection);
+    select_file(open_file, &name_array, max_selection, 'o');
 
     get_params_from_filestring(group_file_buffer, open_file, 'f');
 
@@ -349,6 +349,7 @@ int reference(void)
     char **name_array;
     char group_file_buffer[MAX_FILE_LINE * MAX_FILE_LENGTH];
     int elements_to_free = 0;
+    char file_type = 0;
 
     // clear screen
     clear_screen();
@@ -364,9 +365,9 @@ int reference(void)
     // clear screen
     clear_screen();
     
-    select_file(open_file, &name_array, elements_to_free - 1);
+    file_type = select_file(open_file, &name_array, elements_to_free - 1, 'r');
 
-    get_params_from_filestring(group_file_buffer, open_file, 'r');
+    get_params_from_filestring(group_file_buffer, open_file, file_type);
 
     /* update global vars 'group_name' and 'file_name' */
     /* with selected values */
