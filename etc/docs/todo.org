@@ -1,0 +1,10 @@
+* coding
+** TODO format number outputs in table
+** TODO implement 'fault' column in table
+** TODO implement menu display
+
+* testing
+** TODO does AVG group function ignore target files?
+
+* debug
+
