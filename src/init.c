@@ -4,6 +4,7 @@
 
 #include "../include/init.h"
 #include "../include/tsp.h"
+#include "../include/tsp_file_func_utils.h"
 
 int tsp_init(void)
 {
@@ -128,6 +129,7 @@ int tsp_init(void)
     strcpy(ref_file_name, empty_label);
     strcpy(group_name, empty_label);
     strcpy(ref_group_name, empty_label);
+    strcpy(tolerance_name, "default");
     auto_calc_status = 'N';
 
     //  check to see if .grp manifest file has been created
@@ -139,6 +141,9 @@ int tsp_init(void)
 
     is_target_flag.file_target = 'N';
     is_target_flag.ref_target = 'N';
+
+    // load tolerance table
+    load_tolerances("default");
 
     return 0;
 

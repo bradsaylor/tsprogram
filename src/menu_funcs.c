@@ -388,7 +388,19 @@ int reference(void)
 
 int tolerance(void)
 {
+    char **name_array;
+    int elements_to_free = 0;
+    char selected_tolerance[MAX_NAME_LENGTH];
+    int max_selection = 0;
 
+
+
+    elements_to_free = build_file_name_array(".tolerance_manifest", &name_array);
+    max_selection = elements_to_free - 1;
+    select_file(selected_tolerance, "", &name_array, max_selection, 't');
+    load_tolerances(selected_tolerance);
+
+    
     return 0;
 }
 

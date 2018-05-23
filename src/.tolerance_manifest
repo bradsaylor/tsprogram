@@ -1,0 +1,32 @@
+ID: default
+
+ 
+$
+name:	default
+fs:	10
+re:	10
+res:	10
+qms:	10
+qes:	10
+qts:	10
+vas:	10
+mms:	10
+cms:	10
+bl:	10
+spl:	10
+sd:	10
+
+$
+name:	tight
+fs:	1
+re:	1
+res:	1
+qms:	1
+qes:	1
+qts:	1
+vas:	1
+mms:	1
+cms:	1
+bl:	1
+spl:	1
+sd:	1

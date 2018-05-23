@@ -276,32 +276,36 @@ int select_group_file(char *group_file_name)
 
 int select_file(char *name, char *open_group, char ***name_array, int max_selection, char type)
 {
-    // types (open) -> o, reference -> r
+    // types (open) -> o, (reference) -> r
 
     char input[MAX_VALUE_LENGTH];
     char selection[MAX_VALUE_LENGTH];
     int count = 0;
     int avg_select_number = -1;
 
-    // list group files in .grp file
+    // list files
     for (count = 0; count < max_selection; count++) {
 	printf("[%d] %s\n", count + 1, (*name_array)[count]);
     }
 
+    // if loading a reference add "Group AVG" option
     if(type == 'r') printf("[%d] %s\n", count + 1, "Group AVG");
 
-    // prompt for an store user selection
+    // prompt for and store user selection
     printf("select file: ");
     if(fgets(input, sizeof(selection), stdin) != NULL) {
 	sscanf(input, "%s", selection);
     }
 
-    // verify input is in allowable range
+    // if loading a reference increment max allowable selection
+    // to account for "Group AVG" selection
+    // Store index for "Group AVG" selection in 'avg_select_number'
     if(type == 'r') {
 	max_selection++;
 	avg_select_number = max_selection;
     }
-    
+
+    // verify input is in allowable range    
     if((atoi(selection) < 1) || (atoi(selection) > max_selection)) {
 	rewind_line("Invalid input", "...press any key");
 	return 1;
@@ -311,20 +315,22 @@ int select_file(char *name, char *open_group, char ***name_array, int max_select
     if(atoi(selection) == avg_select_number) type = 'a';
     
     // copy selected group or file to appropriate name variable
-    if((type == 'o') || (type == 'r')) strcpy(name, (*name_array)[atoi(selection) - 1]);
-    if(type == 'a') {
+    if((type == 'o') || (type == 'r') || (type == 't'))
+	strcpy(name, (*name_array)[atoi(selection) - 1]);
+    else if(type == 'a') {
 	char avg_group_file_name[MAX_NAME_LENGTH];
 	strcpy(avg_group_file_name, open_group);
 	strcat(avg_group_file_name, ".grp-AVG");
 	strcpy(name, avg_group_file_name);
     }
 
+
     return type;
 }
 
 int get_params_from_filestring(char *group_file_buffer, char *open_file, char type)
 {
-    // types: (file) -> f, (reference) -> r, (average) -> a
+    // types: (file) -> f, (reference) -> r, (average) -> a, (tolerance) -> t
     char group_file_tokenized[MAX_FILE_LINE * MAX_FILE_LENGTH];
     char *tok;
     const char delim[2] = "$";
@@ -379,6 +385,11 @@ int get_params_from_filestring(char *group_file_buffer, char *open_file, char ty
 		        param_avg_array[count - 2] += atof(extracted_value);
 		    }
 		    break;
+		case 't':
+		    if(!strcmp(current_name, open_file)) {
+			strcpy(parameters[count].tolerance, extracted_value);
+		    }
+		    break;
 		default:
 		    break;
 		}
@@ -416,4 +427,14 @@ int compile_variance()
   }
 
   return 0;
+}
+
+int load_tolerances(char *selected_tolerance)
+{
+    char tolerance_file_buffer[MAX_FILE_LINE * MAX_FILE_LENGTH];
+    
+    return_file_as_string(".tolerance_manifest", tolerance_file_buffer, sizeof(tolerance_file_buffer));
+    get_params_from_filestring(tolerance_file_buffer, selected_tolerance, 't');
+
+    return 0;
 }
