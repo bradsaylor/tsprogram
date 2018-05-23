@@ -85,8 +85,10 @@ int main(void)
 	}
 
 	// set quit input
-	if (!strcmp(selection, "q"))
+	if (!strcmp(selection, "q")) {
+	    clear_screen();
 	    return 0;
+	}
 
 	// validate input
 	validate_input(selection);
