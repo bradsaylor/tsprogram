@@ -318,7 +318,7 @@ int open(void)
     // clear screen
     clear_screen();
 
-    select_group_file(open_group);
+    if(select_group_file(open_group)) return 1;
 
     // append .grp extension and store in 'group_name_ext'
     sprintf(group_name_ext, "%s%s", open_group, FILE_EXTENSION);
@@ -333,7 +333,7 @@ int open(void)
     // clear screen
     clear_screen();
 
-    select_file(open_file, open_group, &name_array, max_selection, 'o');
+    if(select_file(open_file, open_group, &name_array, max_selection, 'o') == 'x') return 1;
 
     get_params_from_filestring(group_file_buffer, open_file, 'f');
 
@@ -365,7 +365,7 @@ int reference(void)
     // clear screen
     clear_screen();
 
-    select_group_file(open_group);
+    if(select_group_file(open_group)) return 1;
 
     // append .grp extension and store in 'group_name_ext'
     sprintf(group_name_ext, "%s%s", open_group, FILE_EXTENSION);
@@ -377,6 +377,7 @@ int reference(void)
     clear_screen();
     
     file_type = select_file(open_file, open_group, &name_array, elements_to_free - 1, 'r');
+    if(file_type == 'x') return 1;
 
     params_obtained_flag = get_params_from_filestring(group_file_buffer, open_file, file_type);
 

@@ -308,7 +308,7 @@ int select_file(char *name, char *open_group, char ***name_array, int max_select
     // verify input is in allowable range    
     if((atoi(selection) < 1) || (atoi(selection) > max_selection)) {
 	rewind_line("Invalid input", "...press any key");
-	return 1;
+	return 'x';
     }
 
     // if group avg is chosen set type to 'a'
