@@ -13,8 +13,8 @@ int tsp_init(void)
     strcpy(parameters[table_header].value, "Value");
     strcpy(parameters[table_header].units, "Units");
     strcpy(parameters[table_header].ref_value, "Ref. Value");
-    strcpy(parameters[table_header].variance, "Variance");
-    strcpy(parameters[table_header].tolerance, "Tolerance");
+    strcpy(parameters[table_header].variance, "Variance %");
+    strcpy(parameters[table_header].tolerance, "Tolerance %");
     strcpy(parameters[table_header].fault, "Fault");
 
 

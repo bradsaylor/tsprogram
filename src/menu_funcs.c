@@ -72,7 +72,7 @@ int validate_input(char *input)
     } else if (!strcmp(input, "v")) {
 	variance();
 	return 0;
-    } else if (!strcmp(input, "m")) {
+    } else if (!strcmp(input, "k")) {
 	target();
 	return 0;
     } else if (!strcmp(input, "q")) {
@@ -91,6 +91,16 @@ int validate_input(char *input)
 
 int menu(void)
 {
+    char menu_line[MAX_FILE_LINE];
+    FILE *fp;
+
+    clear_screen();
+    fp = fopen(menu_file, "r");
+    while(fgets(menu_line, sizeof(menu_line), fp) != NULL) {
+	printf("%s\n", menu_line);
+    }
+    printf("\n");
+
     return 0;
 }
 
@@ -426,7 +436,7 @@ int calc(void)
     return 0;
 }
 
-int reset (void)
+int reset(void)
 {
     tsp_init();
     

@@ -1,0 +1,11 @@
+[#] edit parameter
+[n] name file
+[g] name group
+[s] save file
+[o] open file
+[r] open reference
+[t] select tolerance file
+[k] make target
+[a] toggle auto-calc
+[z] reset
+[q] quit

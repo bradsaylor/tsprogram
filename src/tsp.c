@@ -22,6 +22,8 @@ char group_name[MAX_NAME_LENGTH];
 char ref_group_name[MAX_NAME_LENGTH];
 char tolerance_name[MAX_NAME_LENGTH];
 char manifest_name[] = ".grp_manifest";
+char menu_file[] = ".menu";
+char logo_file[] = ".logo";
 char auto_calc_status;
 char time_stamp[50];
 
@@ -41,22 +43,29 @@ int main(void)
     char input[MAX_VALUE_LENGTH];
     char selection[MAX_VALUE_LENGTH];
     int quit_flag = 0;
+    int screen_width = (table_cell_width + 1) * num_param_attributes + 2;
+    int screen_height = (2 * (last - 1) + 1) + 6;
 
     // run initialization function
     tsp_init();
+
+    bash_resize(screen_width, screen_height);
+
+    splash_screen();
 
     while (!quit_flag) {
         // compile variance data
         compile_variance();
 
 	// compute faults
-//	compute_faults();
+	compute_faults();
         
       
 	// print initial screen
 	print_display_table();
 
 	//prompt for input
+	printf("[m]->menu\n");
 	printf("Make selection: ");
 
 	// read input and scan into string if size is ok
@@ -64,13 +73,23 @@ int main(void)
 	    sscanf(input, "%s", selection);
 	}
 
-        // set quit input
+	while(!strcmp(selection, "m"))
+	{
+	    menu();
+	    printf("Make selection: ");
+
+	    // read input and scan into string if size is ok
+	    if (fgets(input, sizeof(selection), stdin) != NULL) {
+	        sscanf(input, "%s", selection);
+	    }	    
+	}
+
+	// set quit input
 	if (!strcmp(selection, "q"))
 	    return 0;
 
 	// validate input
-	if ((quit_flag = validate_input(selection))) return 0;
-
+	validate_input(selection);
     }
     return 0;
 

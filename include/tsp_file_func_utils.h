@@ -13,4 +13,7 @@ int select_group_file(char *group_file_name);
 int select_file(char *name, char *open_group, char ***name_array, int max_selection, char type);
 int get_params_from_filestring(char *group_file_buffer, char *open_file, char type);
 int compile_variance();
+int load_tolerances(char *selected_tolerance);
+int compute_faults();
+
 #endif //TSP_FILE_FUNC_UTILS_H_

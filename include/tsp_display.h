@@ -7,5 +7,6 @@ int print_table_horizontal_delimiter(int columns, int cell_width,
 				     char delimiter);
 int populate_display_table(void);
 int clear_screen(void);
+int splash_screen();
 
 #endif				//TSP_DISPLAY_H_

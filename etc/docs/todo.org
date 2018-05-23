@@ -1,10 +1,13 @@
 * coding
-** TODO format number outputs in table
-** TODO implement 'fault' column in table
-** TODO implement menu display
+** DONE format number outputs in table
+** DONE implement 'fault' column in table
+** DONE implement menu display
+** TODO implement opening graphic
+** TODO change input to getch()'s
 
 * testing
 ** TODO does AVG group function ignore target files?
 
 * debug
-
+** TODO when selecting bad input for open() program aborts
+** TODO when file unsaved and has '*' indication reset() does not clear the extra '*'

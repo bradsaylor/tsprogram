@@ -421,7 +421,7 @@ int compile_variance()
     if((strcmp(parameters[count].value, empty_label)) && (strcmp(parameters[count].ref_value, empty_label))) {
       variance_percent =
 	100 * (atof(parameters[count].value) - atof(parameters[count].ref_value))/(atof(parameters[count].ref_value));
-      sprintf(variance_string, "%f", variance_percent);
+      sprintf(variance_string, "%6.1f", variance_percent);
       strcpy(parameters[count].variance, variance_string);
     } else strcpy(parameters[count].variance, empty_label);
   }
@@ -435,6 +435,20 @@ int load_tolerances(char *selected_tolerance)
     
     return_file_as_string(".tolerance_manifest", tolerance_file_buffer, sizeof(tolerance_file_buffer));
     get_params_from_filestring(tolerance_file_buffer, selected_tolerance, 't');
+
+    return 0;
+}
+
+int compute_faults()
+{
+    for(int count = 2; count < last; count++) {
+	if(strcmp(parameters[count].value, empty_label)
+	   && strcmp(parameters[count].ref_value, empty_label)) {
+	    if(abs(atof(parameters[count].variance)) > abs(atof(parameters[count].tolerance))) {
+		strcpy(parameters[count].fault, "!!FAULT!!");
+	    }
+	}
+    }
 
     return 0;
 }

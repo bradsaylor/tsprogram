@@ -6,7 +6,7 @@
   global constant declarations
 *******************************/
 #define MAX_NAME_LENGTH 50	       // max length of any string input
-#define MAX_VALUE_LENGTH 11	       // max length of any number input
+#define MAX_VALUE_LENGTH 15	       // max length of any number input
 #define MAX_FILE_LINE 100	       // max chars in any file line
 #define MAX_FILE_LENGTH 500	       // max number of lines in any file
 #define FILE_EXTENSION ".grp"	       // extension for group data files
@@ -76,7 +76,10 @@ extern char file_name[];	// data file name defined in tsp.c
 extern char ref_file_name[];	// reference data file name defined in tsp.c
 extern char group_name[];	// group file name defined in tsp.c
 extern char ref_group_name[];	// reference group file name defined in tsp.c
+extern char tolerance_name[];	// name of selected tolerance file defined in tsp.c
 extern char manifest_name[];	// .grp file manifest file name
+extern char menu_file[];	// name of menu definition file
+extern char logo_file[];	// name of splash screen logo data file
 extern char auto_calc_status;
 extern char time_stamp[];
 

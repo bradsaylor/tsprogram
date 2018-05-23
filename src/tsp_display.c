@@ -3,6 +3,7 @@
 
 #include "../include/tsp.h"
 #include "../include/tsp_display.h"
+#include "../include/util.h"
 
 
 int print_display_table(void)
@@ -93,11 +94,17 @@ int populate_display_table()
 {
     int count1 = 0;
     int num_parameters = last - 1;
+    char param_name_numbered[MAX_VALUE_LENGTH];
 
     for (count1 = 0; count1 < num_parameters; count1++) {
 	// parameters index is 'count1 + 1'
 	// because parameters enum begins at 1 not 0
-	strcpy(display_table[count1][0], parameters[count1 + 1].name);
+
+	sprintf(param_name_numbered, "%d %s", count1, parameters[count1 + 1].name);
+
+	if(count1 == 0) strcpy(display_table[count1][0], parameters[count1 + 1].name);
+	else strcpy(display_table[count1][0], param_name_numbered);
+
 	strcpy(display_table[count1][1], parameters[count1 + 1].value);
 	strcpy(display_table[count1][2], parameters[count1 + 1].units);
 	strcpy(display_table[count1][3], parameters[count1 + 1].ref_value);
@@ -112,5 +119,20 @@ int populate_display_table()
 int clear_screen()
 {
     for(int count = 0; count < lines_to_clear_scrn; count++) printf("\n");
+    return 0;
+}
+
+int splash_screen()
+{
+    FILE *fp;
+    char file_line[MAX_FILE_LINE];
+
+    fp = fopen(logo_file, "r");
+    clear_screen();
+    while(fgets(file_line, sizeof(file_line), fp) != NULL) {
+	printf("%s", file_line);
+    }
+    rewind_line("...", "any key");
+
     return 0;
 }
