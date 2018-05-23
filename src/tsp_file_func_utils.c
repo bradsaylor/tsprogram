@@ -214,7 +214,6 @@ int remove_file_from_group(char *file_to_remove, char *group)
 
     return_file_as_string(group, file_buffer, sizeof(file_buffer));
     strcpy(file_tokenized, file_buffer);
-    
     // initialize strtok operation on 'file_buffer'
     tok = strtok(file_tokenized, delim);
     
@@ -226,6 +225,7 @@ int remove_file_from_group(char *file_to_remove, char *group)
 	extract_name(tok_buffer, current_name);
 	
 	if (!strcmp(current_name, file_to_remove)) {
+	    
 	    // delete file from group file
 	    replace_file_string(group, tok_buffer, "", last * MAX_FILE_LINE);
 	    found_file_flag = 0;

@@ -416,7 +416,7 @@ int replace_file_string(char *name, char* old_str, char *new_str, int MAX_FILE_B
 {
     char file_buffer[MAX_FILE_BUFFER];
     FILE *fp;
-    char file_char = '\0';
+    int file_char = '\0';
     int read_count = 0;
     char *insert_point = NULL;
     char temp_file_name[] = ".temp_replace_file_string";
