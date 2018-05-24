@@ -402,7 +402,7 @@ int get_params_from_filestring(char *group_file_buffer, char *open_file, char ty
 	char avg_value[MAX_VALUE_LENGTH];
 
 	for(int count = 2; count < last; count++) {
-	    sprintf(avg_value, "%f", param_avg_array[count - 2]/((float)(avg_count)));
+	    sprintf(avg_value, "%6.2f", param_avg_array[count - 2]/((float)(avg_count)));
 	    strcpy(parameters[count].ref_value, avg_value);
 	}
     }
